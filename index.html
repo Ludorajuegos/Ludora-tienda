@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ludora · Juegos para toda la familia</title>
+<meta name="description" content="Juegos de mesa y puzzles de habilidad mental. Lo viste en mis videos, aquí lo llevas a casa. Pago seguro y envío a toda Colombia.">
+<meta name="theme-color" content="#FFF1E6">
+<meta property="og:title" content="Ludora · Juegos para toda la familia">
+<meta property="og:description" content="Juegos de mesa y puzzles con envío a toda Colombia.">
+<meta property="og:image" content="img/tiburon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,500..900,0..100,0..1&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#1E2A4A; --tinta-2:#4B5675; --linea:#EADFD2; --fondo:#FFF1E6; --crema:#FFE4D1; --foto:#F7F5F1;
+  --coral:#FF5A47; --coral-hover:#FF7262; --coral-osc:#C2321F;
+  --mostaza:#FFB020; --turquesa:#14B8A6; --lila:#8B6CF0; --naranja:#FF8A3D; --rosa:#EC4899;
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Outfit', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --radio:18px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:84px; -webkit-text-size-adjust:100%}
+@media (max-width:719px){ html{scroll-padding-top:128px} }
+body{margin:0; background:var(--fondo); color:var(--tinta); font-family:var(--sans); font-size:16px; line-height:1.55;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%; display:block}
+a{color:inherit}
+button,input,select{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--turquesa); outline-offset:2px; border-radius:8px}
+.contenedor{max-width:1200px; margin:0 auto; padding:0 16px}
+@media (min-width:720px){ .contenedor{padding:0 28px} }
+.oculto{display:none !important}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* ---------- Encabezado ---------- */
+.encabezado{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.96); backdrop-filter:saturate(1.4) blur(8px);
+  border-bottom:1px solid var(--linea); padding-top:env(safe-area-inset-top,0px)}
+.encabezado .contenedor{display:flex; align-items:center; gap:16px; min-height:64px}
+.marca{font-family:var(--serif); font-weight:900; font-size:30px; letter-spacing:-.5px; text-decoration:none; line-height:1;
+  font-variation-settings:'SOFT' 100,'WONK' 1}
+.marca span{display:inline-block}
+.encabezado .contenedor{flex-wrap:wrap; row-gap:8px; padding-top:8px; padding-bottom:8px}
+.menu{display:none; gap:22px}
+.menu a{text-decoration:none; font-weight:500; padding:8px 0; white-space:nowrap}
+.menu a:hover{color:var(--coral-osc)}
+@media (min-width:1140px){ .menu{display:flex} }
+.boton-menu{margin-left:auto; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:6px 14px; border-radius:999px;
+  border:2px solid var(--linea); background:#fff; font-weight:600; cursor:pointer}
+.boton-menu svg{width:20px; height:20px}
+@media (min-width:1140px){ .boton-menu{display:none} }
+.menu-movil{display:none; width:100%; order:5; flex-direction:column; padding:4px 0 8px}
+.menu-movil.abierto{display:flex}
+.menu-movil a{text-decoration:none; font-weight:600; font-size:18px; padding:12px 4px; border-bottom:1px solid var(--linea)}
+.menu-movil a:last-child{border-bottom:0}
+@media (min-width:1140px){ .menu-movil{display:none !important} }
+.busqueda{position:relative; order:4; flex:1 1 100%}
+@media (min-width:720px){ .busqueda{order:0; flex:1 1 260px; max-width:440px; margin:0 auto} }
+.busqueda svg.lupa{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:20px; height:20px; color:var(--tinta-2); pointer-events:none}
+.busqueda input{width:100%; min-height:46px; padding:10px 42px 10px 44px; border-radius:999px; border:2px solid var(--linea);
+  background:var(--fondo); font-size:16px}
+.busqueda input:focus{outline:none; border-color:var(--turquesa); background:#fff}
+.busqueda input::-webkit-search-cancel-button{display:none}
+.busqueda .limpiar{position:absolute; right:4px; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:19px;
+  border:0; background:transparent; cursor:pointer; font-size:22px; color:var(--tinta-2)}
+.sugerencias{position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:25; background:#fff; border:1px solid var(--linea);
+  border-radius:18px; box-shadow:0 16px 40px rgba(30,42,74,.16); overflow:hidden; list-style:none; margin:0; padding:6px}
+.sugerencias a, .sugerencias button{display:grid; grid-template-columns:48px 1fr auto; gap:12px; align-items:center; width:100%;
+  padding:8px; border-radius:12px; text-decoration:none; background:none; border:0; text-align:left; cursor:pointer}
+.sugerencias a:hover, .sugerencias a:focus, .sugerencias .activo{background:var(--fondo); outline:none}
+.sugerencias .mini{width:48px; height:48px; border-radius:10px; background:var(--foto); overflow:hidden; position:relative}
+.sugerencias .mini img{width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply}
+.sugerencias .mini .sin-foto{font-size:22px}
+.sugerencias b{display:block; font-size:15px; line-height:1.25}
+.sugerencias small{color:var(--tinta-2); font-size:13px}
+.sugerencias .ver-todo{display:block; text-align:center; font-weight:700; color:var(--coral-osc); padding:12px}
+.sugerencias .nada{padding:14px; color:var(--tinta-2); text-align:center}
+.boton-carrito{ display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:6px 8px 6px 16px;
+  border-radius:999px; border:0; background:var(--tinta); color:#fff; font-weight:600; cursor:pointer}
+@media (min-width:1140px){ .boton-carrito{margin-left:8px} }
+.boton-carrito svg{width:20px; height:20px}
+@media (max-width:479px){ .txt-carrito{display:none} .boton-carrito{padding-left:12px} }
+.cuenta{min-width:28px; height:28px; padding:0 8px; border-radius:14px; background:var(--mostaza); color:var(--tinta);
+  display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:700}
+.cuenta.salta{animation:salta .35s ease-out}
+@keyframes salta{50%{transform:scale(1.3)}}
+
+/* ---------- Portada ---------- */
+.portada{background:var(--crema); overflow:hidden}
+.portada .contenedor{display:grid; gap:28px; padding-top:36px; padding-bottom:40px; align-items:center}
+@media (min-width:900px){ .portada .contenedor{grid-template-columns:1.05fr 1fr; padding-top:56px; padding-bottom:64px} }
+.portada h1{font-family:var(--serif); font-weight:900; font-size:clamp(64px,15vw,150px); line-height:.9; margin:0 0 18px;
+  letter-spacing:-2px; font-variation-settings:'SOFT' 100,'WONK' 1,'opsz' 144}
+.portada h1 span{display:inline-block}
+.lema{font-size:clamp(19px,2.6vw,24px); line-height:1.4; margin:0 0 26px; max-width:30ch}
+.lema b{font-weight:700}
+.acciones-portada{display:flex; flex-wrap:wrap; gap:12px}
+.collage{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+@media (min-width:900px){ .collage{grid-template-columns:1fr 1fr; gap:16px} }
+.collage a{aspect-ratio:1; border-radius:22px; overflow:hidden; display:block; background:#fff; position:relative;
+  border:4px solid var(--c)}
+.collage a:nth-child(odd){transform:rotate(-2.5deg)}
+.collage a:nth-child(even){transform:rotate(2deg) translateY(8px)}
+.collage img{width:100%; height:100%; object-fit:cover}
+.collage a:hover{transform:rotate(0) scale(1.03); transition:transform .2s}
+
+/* ---------- Botones ---------- */
+.boton{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:12px 24px; border-radius:999px;
+  border:0; font-weight:700; font-size:16px; text-decoration:none; cursor:pointer; background:var(--coral); color:var(--tinta);
+  transition:background .15s, transform .1s}
+.boton:hover{background:var(--coral-hover)}
+.boton:active{transform:scale(.97)}
+.boton.secundario{background:#fff; box-shadow:inset 0 0 0 2px var(--tinta)}
+.boton.secundario:hover{background:var(--tinta); color:#fff}
+.boton[aria-disabled="true"], .boton:disabled{background:#E7E3DC; color:#6B6760; cursor:not-allowed; transform:none}
+.boton.ancho{width:100%}
+
+/* ---------- Ventajas ---------- */
+.ventajas{border-bottom:1px solid var(--linea)}
+.ventajas ul{list-style:none; margin:0; padding:14px 0; display:flex; gap:10px 28px; flex-wrap:wrap; justify-content:center}
+.ventajas li{display:flex; align-items:center; gap:8px; font-weight:500; font-size:15px}
+.ventajas svg{width:22px; height:22px; flex:none}
+
+/* ---------- Catálogo ---------- */
+.seccion{padding:44px 0}
+@media (min-width:720px){ .seccion{padding:64px 0} }
+.titulo{font-family:var(--serif); font-weight:800; font-size:clamp(32px,5vw,48px); line-height:1.05; margin:0 0 8px;
+  font-variation-settings:'SOFT' 100}
+.intro{color:var(--tinta-2); margin:0 0 22px; max-width:60ch}
+.herramientas{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px}
+.aviso-busqueda{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-bottom:18px}
+.quienes{display:grid; gap:28px; align-items:center}
+@media (min-width:860px){ .quienes{grid-template-columns:.9fr 1.1fr; gap:56px} }
+.collage-yo{display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:440px; width:100%}
+.collage-yo a{aspect-ratio:1; border-radius:22px; overflow:hidden; background:#fff; border:4px solid var(--c); display:block}
+.collage-yo a:nth-child(1){transform:rotate(-3deg)} .collage-yo a:nth-child(2){transform:rotate(2deg) translateY(10px)}
+.collage-yo a:nth-child(3){transform:rotate(2deg)} .collage-yo a:nth-child(4){transform:rotate(-2deg) translateY(10px)}
+.collage-yo img{width:100%; height:100%; object-fit:cover}
+.quienes img.foto-yo{width:100%; object-fit:cover; padding:0}
+.quienes .foto-yo{aspect-ratio:4/5; border-radius:28px; background:#fff; border:4px solid var(--mostaza); display:flex; align-items:center;
+  justify-content:center; text-align:center; color:var(--tinta-2); font-weight:600; padding:24px; transform:rotate(-2deg); max-width:420px}
+.quienes p{font-size:17px; line-height:1.7; margin:0 0 16px; max-width:60ch}
+.quienes .redes{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px}
+.buscador{flex:1 1 280px; position:relative}
+.buscador svg{position:absolute; left:16px; top:50%; transform:translateY(-50%); width:20px; height:20px; color:var(--tinta-2)}
+.buscador input{width:100%; min-height:52px; padding:12px 44px 12px 46px; border-radius:999px; border:2px solid var(--linea);
+  background:#fff; font-size:17px}
+.buscador input:focus{outline:none; border-color:var(--turquesa)}
+.limpiar{position:absolute; right:6px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:20px;
+  border:0; background:transparent; cursor:pointer; font-size:22px; color:var(--tinta-2)}
+.orden{min-height:52px; padding:0 40px 0 18px; border-radius:999px; border:2px solid var(--linea); background:#fff;
+  appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231E2A4A' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 16px center}
+.filtros{display:flex; gap:8px; overflow-x:auto; padding:4px 2px 12px; margin:0 -16px; padding-left:16px; padding-right:16px;
+  scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+@media (min-width:720px){ .filtros{flex-wrap:wrap; overflow:visible; margin:0; padding-left:2px} }
+.filtros button{flex:none; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:8px 16px; border-radius:999px;
+  border:2px solid var(--linea); background:#fff; font-weight:600; font-size:15px; cursor:pointer; white-space:nowrap}
+.filtros button i{width:12px; height:12px; border-radius:50%; background:var(--c,var(--tinta))}
+.filtros button small{font-weight:500; color:var(--tinta-2)}
+.filtros button[aria-pressed="true"]{background:var(--tinta); border-color:var(--tinta); color:#fff}
+.filtros button[aria-pressed="true"] small{color:#C9CEDC}
+.resultado{color:var(--tinta-2); font-size:15px; margin:6px 0 18px; min-height:24px}
+.rejilla{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (min-width:640px){ .rejilla{grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px} }
+@media (min-width:1000px){ .rejilla{grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px} }
+
+.tarjeta{display:flex; flex-direction:column; background:#fff; border:1px solid var(--linea); border-radius:var(--radio); overflow:hidden;
+  transition:box-shadow .2s, transform .2s}
+.tarjeta:hover{box-shadow:0 10px 28px rgba(30,42,74,.10); transform:translateY(-2px)}
+.tarjeta .foto{position:relative; display:block; aspect-ratio:1; background:var(--foto)}
+.tarjeta .foto img{width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply}
+.sin-foto{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:900 64px var(--serif);
+  color:var(--c); opacity:.55}
+.chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; letter-spacing:.01em; padding:4px 10px;
+  border-radius:999px; background:color-mix(in srgb, var(--c) 16%, #fff); color:var(--tinta)}
+.chip i{width:8px; height:8px; border-radius:50%; background:var(--c)}
+.tarjeta .chip{position:absolute; top:10px; left:10px}
+.agotado-sello{position:absolute; inset:auto 10px 10px auto; background:var(--tinta); color:#fff; font-size:12px; font-weight:700;
+  padding:4px 10px; border-radius:999px}
+.tarjeta .cuerpo{display:flex; flex-direction:column; gap:2px; padding:12px 12px 14px; flex:1}
+@media (min-width:640px){ .tarjeta .cuerpo{padding:14px 16px 16px} }
+.tarjeta h3{font-family:var(--serif); font-weight:700; font-size:18px; line-height:1.2; margin:0}
+@media (min-width:640px){ .tarjeta h3{font-size:20px} }
+.tarjeta h3 a{text-decoration:none}
+.tarjeta h3 a:hover{text-decoration:underline; text-decoration-color:var(--coral); text-underline-offset:3px}
+.original{font-size:13px; color:var(--tinta-2); line-height:1.3}
+.datos{display:flex; align-items:center; gap:6px; font-size:14px; color:var(--tinta-2); margin-top:4px}
+.datos svg{width:16px; height:16px}
+.pie-tarjeta{margin-top:auto; padding-top:12px; display:flex; flex-direction:column; gap:10px}
+@media (min-width:640px){ .pie-tarjeta{flex-direction:row; align-items:center; justify-content:space-between} }
+.precio{font-family:var(--sans); font-weight:700; font-size:20px; letter-spacing:-.3px}
+.tarjeta .boton{min-height:44px; padding:10px 18px; font-size:15px}
+@media (max-width:639px){ .tarjeta .boton{width:100%} }
+.vacio{grid-column:1/-1; text-align:center; padding:48px 16px; border:2px dashed var(--linea); border-radius:var(--radio)}
+.vacio p{margin:0 0 16px; color:var(--tinta-2)}
+
+/* ---------- Detalle ---------- */
+.volver{display:inline-flex; align-items:center; gap:6px; min-height:44px; font-weight:600; text-decoration:none; margin-bottom:12px}
+.volver:hover{color:var(--coral-osc)}
+.detalle{display:grid; gap:28px}
+@media (min-width:860px){ .detalle{grid-template-columns:1.1fr 1fr; gap:48px; align-items:start} }
+.galeria .grande{position:relative; aspect-ratio:1; border-radius:24px; overflow:hidden; background:var(--foto)}
+.galeria .grande img{width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply}
+.miniaturas{display:flex; gap:10px; margin-top:12px}
+.miniaturas button{width:76px; height:76px; padding:0; border-radius:14px; overflow:hidden; border:3px solid transparent;
+  background:var(--foto); cursor:pointer}
+.miniaturas button[aria-current="true"]{border-color:var(--coral)}
+.miniaturas img{width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply}
+.info h1{font-family:var(--serif); font-weight:800; font-size:clamp(32px,5vw,48px); line-height:1.05; margin:10px 0 4px;
+  font-variation-settings:'SOFT' 100}
+.info .original{font-size:15px}
+.info .precio{display:block; font-size:32px; margin:14px 0 18px}
+.fichas{display:grid; grid-template-columns:1fr 1fr; gap:10px; list-style:none; margin:0 0 22px; padding:0}
+.fichas li{border:1px solid var(--linea); border-radius:14px; padding:12px 14px; background:#fff}
+.fichas small{display:block; color:var(--tinta-2); font-size:13px}
+.fichas b{font-size:16px}
+.descripcion{font-size:17px; line-height:1.65; margin:0 0 18px; max-width:60ch}
+.desarrolla{margin:0 0 24px; padding:14px 18px; border-radius:14px; background:color-mix(in srgb, var(--c) 12%, #fff); max-width:60ch}
+.compra{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+.compra .boton{flex:1 1 220px}
+.garantias{list-style:none; margin:20px 0 0; padding:0; display:grid; gap:8px; color:var(--tinta-2); font-size:15px}
+.garantias li{display:flex; gap:8px; align-items:center}
+.garantias svg{width:18px; height:18px; color:var(--turquesa); flex:none}
+.relacionados{margin-top:56px}
+.relacionados h2{font-family:var(--serif); font-size:28px; margin:0}
+.carrusel-cabeza{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px}
+.flechas{display:flex; gap:8px}
+.flechas button{width:48px; height:48px; border-radius:24px; border:2px solid var(--tinta); background:#fff; color:var(--tinta);
+  font-size:22px; font-weight:700; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center}
+.flechas button:hover:not(:disabled){background:var(--tinta); color:#fff}
+.flechas button:disabled{opacity:.3; cursor:default}
+.pista{display:grid; grid-auto-flow:column; grid-auto-columns:calc((100% - 3 * 24px) / 4); gap:24px; overflow-x:auto;
+  scroll-snap-type:x mandatory; scroll-behavior:smooth; padding:4px 2px 12px; scrollbar-width:none; overscroll-behavior-x:contain}
+.pista::-webkit-scrollbar{display:none}
+.pista > .tarjeta{scroll-snap-align:start; min-width:0}
+@media (max-width:999px){ .pista{grid-auto-columns:calc((100% - 2 * 20px) / 3); gap:20px} }
+@media (max-width:639px){ .pista{grid-auto-columns:calc((100% - 14px) / 2.15); gap:14px} }
+@media (max-width:479px){ .relacionados h2{font-size:23px} .flechas button{width:44px; height:44px} }
+.puntos{display:flex; justify-content:center; gap:8px; margin-top:6px}
+.puntos span{width:8px; height:8px; border-radius:4px; background:var(--linea); transition:width .2s, background .2s}
+.puntos span.activo{width:22px; background:var(--coral)}
+
+/* ---------- Cómo comprar / Preguntas ---------- */
+.franja{background:var(--crema)}
+.pasos{display:grid; gap:16px; list-style:none; margin:0; padding:0}
+@media (min-width:760px){ .pasos{grid-template-columns:repeat(3,1fr); gap:24px} }
+.pasos li{background:#fff; border-radius:var(--radio); padding:22px; display:grid; grid-template-columns:auto 1fr; gap:4px 14px}
+.pasos .n{grid-row:span 2; width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+  font:800 24px var(--serif); background:var(--c)}
+.pasos h3{margin:0; font-size:19px}
+.pasos p{margin:0; color:var(--tinta-2)}
+.preguntas{max-width:780px}
+.preguntas details{border-bottom:1px solid var(--linea)}
+.preguntas summary{cursor:pointer; list-style:none; padding:18px 44px 18px 0; position:relative; font-weight:600; font-size:18px}
+.preguntas summary::-webkit-details-marker{display:none}
+.preguntas summary::after{content:''; position:absolute; right:8px; top:50%; width:12px; height:12px; margin-top:-8px;
+  border-right:3px solid var(--coral); border-bottom:3px solid var(--coral); transform:rotate(45deg); transition:transform .2s}
+.preguntas details[open] summary::after{transform:rotate(-135deg); margin-top:-2px}
+.preguntas p{margin:0 0 18px; color:var(--tinta-2); max-width:65ch}
+
+/* ---------- Pie ---------- */
+.pie{background:var(--tinta); color:#E6E9F2; padding:48px 0 calc(32px + env(safe-area-inset-bottom,0px))}
+.pie .contenedor{display:grid; gap:28px}
+@media (min-width:760px){ .pie .contenedor{grid-template-columns:2fr 1fr 1fr} }
+.pie .marca{font-size:34px}
+.pie h4{margin:0 0 10px; color:#fff; font-size:16px}
+.pie ul{list-style:none; margin:0; padding:0}
+.pie li{margin:6px 0}
+.pie a{text-decoration:none}
+.pie a:hover{text-decoration:underline}
+.legal{grid-column:1/-1; border-top:1px solid rgba(255,255,255,.15); padding-top:18px; font-size:14px; color:#B7BDCE}
+
+/* ---------- Barra flotante (celular) ---------- */
+.barra-carrito{position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom,0px)); z-index:15;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:58px; padding:8px 8px 8px 20px;
+  border-radius:999px; background:var(--tinta); color:#fff; border:0; cursor:pointer; box-shadow:0 10px 30px rgba(30,42,74,.3);
+  font-weight:600; transform:translateY(140%); transition:transform .25s}
+.barra-carrito.visible{transform:none}
+.barra-carrito span:last-child{background:var(--coral); color:var(--tinta); border-radius:999px; padding:10px 18px; font-weight:700}
+@media (min-width:860px){ .barra-carrito{display:none} }
+body.con-barra .pie{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+
+/* ---------- Carrito ---------- */
+dialog.carrito{margin:0 0 0 auto; width:min(440px,100%); height:100%; max-height:100%; border:0; padding:0; background:#fff; color:var(--tinta)}
+dialog.carrito::backdrop{background:rgba(30,42,74,.5)}
+dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s ease-out}
+@keyframes entra{from{transform:translateX(40px); opacity:0}}
+.carrito .cabeza{display:flex; align-items:center; justify-content:space-between; padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px;
+  border-bottom:1px solid var(--linea)}
+.carrito .cabeza h2{font-family:var(--serif); font-size:26px; margin:0}
+.cerrar{width:44px; height:44px; border-radius:22px; border:0; background:var(--foto); font-size:24px; line-height:1; cursor:pointer}
+.carrito .lista{flex:1; overflow:auto; margin:0; padding:4px 20px; list-style:none}
+.item{display:grid; grid-template-columns:72px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--linea)}
+.item .mini{width:72px; height:72px; border-radius:14px; background:var(--foto); overflow:hidden; position:relative}
+.item .mini img{width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply}
+.item .mini .sin-foto{font-size:30px}
+.item h3{font-size:16px; margin:0 0 8px; line-height:1.3}
+.item .fila{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.cantidad{display:inline-flex; align-items:center; border:2px solid var(--linea); border-radius:999px}
+.cantidad button{width:40px; height:40px; border:0; background:transparent; font-size:20px; font-weight:600; cursor:pointer; border-radius:20px}
+.cantidad button:hover{background:var(--foto)}
+.cantidad span{min-width:26px; text-align:center; font-weight:700}
+.quitar{border:0; background:none; color:var(--tinta-2); text-decoration:underline; cursor:pointer; font-size:14px; padding:6px 0}
+.carrito .resumen{padding:16px 20px calc(18px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--linea); background:var(--crema)}
+.linea-res{display:flex; justify-content:space-between; margin:4px 0}
+.linea-res.total{font-size:22px; font-weight:700; margin:10px 0 14px}
+.zonas{border:0; margin:0 0 12px; padding:0}
+.zonas legend{font-weight:700; margin-bottom:8px; padding:0}
+.zona{display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:48px; padding:10px 14px; margin-bottom:8px;
+  border:2px solid var(--linea); border-radius:14px; background:#fff; cursor:pointer}
+.zona:has(input:checked){border-color:var(--coral); background:#FFF5F3}
+.zona input{width:20px; height:20px; accent-color:var(--coral); margin:0 10px 0 0}
+.zona span{flex:1}
+.medios{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 18px}
+.medios span{display:inline-flex; align-items:center; min-height:34px; padding:4px 12px; border-radius:10px; background:#fff;
+  border:1px solid var(--linea); font-size:14px; font-weight:600; color:var(--tinta)}
+.form-datos{list-style:none; padding:8px 0 16px}
+.form-datos fieldset{border:0; margin:0 0 8px; padding:0}
+.form-datos legend{font-family:var(--serif); font-weight:700; font-size:19px; margin:10px 0 8px; padding:0}
+.campo{display:grid; gap:4px; margin-bottom:12px}
+.campo label{font-weight:600; font-size:15px}
+.campo .opcional{font-weight:400; color:var(--tinta-2)}
+.campo input, .campo select{min-height:48px; padding:10px 14px; border-radius:12px; border:2px solid var(--linea); background:#fff; font-size:16px; width:100%}
+.campo input:focus, .campo select:focus{outline:none; border-color:var(--turquesa)}
+.campo.con-error input, .campo.con-error select{border-color:#D93A26}
+.campo .ayuda{color:var(--tinta-2); font-size:13px}
+.campo .error-campo{color:#B42318; font-size:13px; font-weight:600}
+.volver-carrito{border:0; background:none; padding:8px 0; font-weight:600; color:var(--tinta-2); cursor:pointer}
+.nota{font-size:13px; color:var(--tinta-2); text-align:center; margin:10px 0 0}
+.error{background:#FDE7E4; color:#8A1F12; border-radius:12px; padding:10px 14px; font-size:15px; margin:0 0 12px}
+.carrito .vacio-c{text-align:center; padding:48px 8px; color:var(--tinta-2)}
+
+.toast{position:fixed; left:50%; width:max-content; max-width:calc(100% - 32px); top:calc(76px + env(safe-area-inset-top,0px)); transform:translateX(-50%); z-index:30;
+  background:var(--tinta); color:#fff; padding:12px 20px; border-radius:999px; font-weight:600; box-shadow:0 8px 24px rgba(30,42,74,.25);
+  display:flex; align-items:center; gap:8px; animation:baja .25s ease-out}
+.toast svg{width:18px; height:18px; color:var(--mostaza)}
+@keyframes baja{from{opacity:0; transform:translate(-50%,-10px)}}
+
+.gracias{text-align:center; padding:80px 0}
+.gracias h1{font-family:var(--serif); font-size:clamp(38px,6vw,60px); margin:0 0 12px}
+.gracias p{max-width:46ch; margin:0 auto 24px; color:var(--tinta-2)}
+
+@media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important; scroll-behavior:auto !important} }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bolsa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></symbol>
+  <symbol id="i-lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-gente" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6M21 20c0-2.6-1.6-4.8-4-5.6"/></symbol>
+  <symbol id="i-candado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-camion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 10h4l4 3v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m10 9 5 3-5 3z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
+  <symbol id="i-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></symbol>
+</svg>
+
+<header class="encabezado">
+  <div class="contenedor">
+    <a class="marca" href="./" aria-label="Ludora, inicio">
+      <span style="color:var(--coral)">L</span><span style="color:var(--mostaza)">u</span><span style="color:var(--turquesa)">d</span><span style="color:var(--lila)">o</span><span style="color:var(--naranja)">r</span><span style="color:var(--rosa)">a</span>
+    </a>
+    <form class="busqueda" id="form-buscar" role="search" autocomplete="off">
+      <label class="sr" for="buscar">Buscar juegos y puzzles</label>
+      <svg class="lupa" aria-hidden="true"><use href="#i-lupa"/></svg>
+      <input type="search" id="buscar" placeholder="Buscar juegos y puzzles" enterkeyhint="search"
+        role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugerencias">
+      <button type="button" class="limpiar oculto" id="limpiar" aria-label="Borrar búsqueda">×</button>
+      <ul class="sugerencias oculto" id="sugerencias" role="listbox" aria-label="Sugerencias"></ul>
+    </form>
+    <nav class="menu" aria-label="Principal">
+      <a href="./#juegos">Juegos</a>
+      <a href="./#puzzles">Puzzles</a>
+      <a href="./#como-comprar">Cómo comprar</a>
+      <a href="./#quienes-somos">Quiénes somos</a>
+      <a href="./#preguntas">Preguntas</a>
+    </nav>
+    <button type="button" class="boton-menu" id="boton-menu" aria-expanded="false" aria-controls="menu-movil">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menú
+    </button>
+    <button type="button" class="boton-carrito" id="abrir-carrito" aria-haspopup="dialog" aria-label="Abrir carrito">
+      <svg aria-hidden="true"><use href="#i-bolsa"/></svg><span class="txt-carrito">Carrito</span> <span class="cuenta" id="cuenta">0</span>
+    </button>
+    <nav class="menu-movil" id="menu-movil" aria-label="Menú">
+      <a href="./#juegos">Juegos</a>
+      <a href="./#puzzles">Puzzles</a>
+      <a href="./#como-comprar">Cómo comprar</a>
+      <a href="./#quienes-somos">Quiénes somos</a>
+      <a href="./#preguntas">Preguntas</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div id="vista-catalogo">
+    <section class="portada">
+      <div class="contenedor">
+        <div>
+          <h1 aria-label="Ludora">
+            <span style="color:var(--coral); transform:translateY(-4px) rotate(-5deg)">L</span><span style="color:var(--mostaza); transform:translateY(8px) rotate(4deg)">u</span><span style="color:var(--turquesa); transform:translateY(-8px) rotate(-3deg)">d</span><span style="color:var(--lila); transform:translateY(6px) rotate(6deg)">o</span><span style="color:var(--naranja); transform:translateY(-5px) rotate(-4deg)">r</span><span style="color:var(--rosa); transform:translateY(4px) rotate(5deg)">a</span>
+          </h1>
+          <p class="lema"><b>Lo viste en mis videos, aquí lo llevas a casa.</b> Juegos de mesa y puzzles para reír, competir y jugar en familia.</p>
+          <div class="acciones-portada">
+            <a class="boton" href="#juegos">Ver los juegos</a>
+            <a class="boton secundario" href="#puzzles">Ver los puzzles</a>
+          </div>
+        </div>
+        <div class="collage" id="collage" aria-label="Algunos de nuestros juegos"></div>
+      </div>
+    </section>
+
+    <section class="ventajas" aria-label="Ventajas">
+      <ul class="contenedor">
+        <li><svg aria-hidden="true" style="color:var(--coral)"><use href="#i-camion"/></svg>Envío a toda Colombia</li>
+        <li><svg aria-hidden="true" style="color:var(--turquesa)"><use href="#i-candado"/></svg>Pago seguro con Wompi</li>
+        <li><svg aria-hidden="true" style="color:var(--lila)"><use href="#i-play"/></svg>Probados en mis videos</li>
+      </ul>
+    </section>
+
+    <section class="seccion" id="juegos">
+      <div class="contenedor">
+        <h2 class="titulo" id="titulo-juegos">Juegos de mesa</h2>
+        <p class="intro" id="intro-juegos">¡Que empiece la partida! Risas, retos y piques para toda la familia: elige tus favoritos, llena el carrito y en 3 a 4 días hábiles la diversión llega a tu puerta.</p>
+        <div class="aviso-busqueda oculto" id="aviso-busqueda">
+          <button type="button" class="boton secundario" id="quitar-busqueda">Quitar búsqueda</button>
+        </div>
+        <div class="herramientas">
+          <p class="resultado" id="resultado" aria-live="polite" style="margin:0"></p>
+          <label>
+            <span class="sr">Ordenar</span>
+            <select class="orden" id="orden">
+              <option value="destacados">Destacados</option>
+              <option value="menor">Menor precio</option>
+              <option value="mayor">Mayor precio</option>
+              <option value="nombre">Nombre A–Z</option>
+            </select>
+          </label>
+        </div>
+        <div class="filtros" id="filtros" role="group" aria-label="Filtrar por tipo de juego"></div>
+        <div class="rejilla" id="rejilla"></div>
+      </div>
+    </section>
+
+    <section class="seccion franja" id="puzzles">
+      <div class="contenedor">
+        <h2 class="titulo">Puzzles de habilidad mental</h2>
+        <p class="intro">¿Crees que nada te detiene? Estos retos de metal te harán dudarlo: aquí la fuerza no sirve, solo gana el ingenio. Caben en tu bolsillo, enganchan desde el primer intento y son el regalo perfecto para quien ama un buen desafío.</p>
+        <p class="resultado" id="resultado-puzzles"></p>
+        <div class="rejilla" id="rejilla-puzzles"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="seccion oculto" id="vista-detalle">
+    <div class="contenedor">
+      <a class="volver" href="./#juegos"><svg width="20" height="20" aria-hidden="true"><use href="#i-flecha"/></svg>Todos los juegos</a>
+      <div class="detalle" id="detalle"></div>
+      <div class="relacionados" id="relacionados"></div>
+    </div>
+  </section>
+
+  <section class="gracias oculto" id="vista-gracias">
+    <div class="contenedor">
+      <h1>¡Gracias por tu compra!</h1>
+      <p>Te llegará la confirmación del pago a tu correo. Tu pedido llega en 3 a 4 días hábiles. Cuando lo entreguemos a la transportadora te enviamos el enlace de rastreo.</p>
+      <a class="boton" href="./">Seguir viendo juegos</a>
+    </div>
+  </section>
+
+  <section class="seccion" id="como-comprar">
+    <div class="contenedor">
+      <h2 class="titulo">Cómo comprar</h2>
+      <p class="intro">Todo se hace desde esta página, en pocos minutos.</p>
+      <ol class="pasos">
+        <li><span class="n" style="--c:var(--coral)">1</span><h3>Arma tu carrito</h3><p>Agrega todos los juegos que quieras y ajusta las cantidades.</p></li>
+        <li><span class="n" style="--c:var(--mostaza)">2</span><h3>Paga una sola vez</h3><p>Llena tus datos de envío y paga con Nequi, Bancolombia, tarjeta o PSE.</p></li>
+        <li><span class="n" style="--c:var(--turquesa)">3</span><h3>Recíbelo en casa</h3><p>Llega en 3 a 4 días hábiles a cualquier ciudad de Colombia, con enlace de rastreo.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="seccion" id="quienes-somos">
+    <div class="contenedor quienes">
+      <!-- Cuando tengas tu foto: reemplaza este bloque por <img class="foto-yo" src="img/mi-foto.jpg" alt="Jugando en Ludora"> -->
+      <div class="collage-yo" id="collage-yo" aria-hidden="true"></div>
+      <div>
+        <h2 class="titulo">Quiénes somos</h2>
+        <p>Ludora nació de algo muy simple: las ganas de jugar. Empezamos grabando videos probando juegos de mesa, puzzles y retos de habilidad, y descubrimos que no hay nada que una más a una familia o a un grupo de amigos que una buena partida llena de risas.</p>
+        <p>Cada juego que ves en esta tienda lo hemos jugado, probado y disfrutado frente a la cámara. Si te gustó en un video, aquí lo puedes llevar a tu casa con la tranquilidad de que ya sabes cómo se juega y lo divertido que es.</p>
+        <p>Nuestra misión es que apagues las pantallas un rato y vuelvas a reunirte alrededor de una mesa. ¡Bienvenido a Ludora!</p>
+        <div class="redes">
+          <a class="boton" href="https://www.tiktok.com/@ludorajuegos" target="_blank" rel="noopener">Míranos en TikTok</a>
+          <a class="boton secundario" href="https://www.instagram.com/ludorajuegos/" target="_blank" rel="noopener">Instagram</a>
+          <a class="boton secundario" href="https://www.youtube.com/@Ludorajuegos" target="_blank" rel="noopener">YouTube</a>
+          <a class="boton secundario" href="https://www.facebook.com/profile.php?id=61595236935607" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion franja" id="preguntas">
+    <div class="contenedor">
+      <h2 class="titulo">Preguntas frecuentes</h2>
+      <div class="preguntas">
+        <details><summary>¿Qué son los puzzles?</summary><p>¡Son el gimnasio perfecto para tu cerebro! Un puzzle es un desafío físico y mental que te invita a resolver un misterio paso a paso. Ya sea ensamblando piezas o separando un bloque tridimensional, estos juegos son increíbles para desarrollar tu lógica, estimular el pensamiento lateral (aprender a pensar "fuera de la caja") y cultivar tu paciencia. ¡Es la mezcla ideal entre un reto intelectual y mucha diversión para desconectarte de las pantallas!</p><p><a href="#puzzles" style="font-weight:700; color:var(--coral-osc)">Ver los puzzles</a></p></details>
+        <details><summary>¿Qué medios de pago aceptan?</summary>
+          <p>¡Queremos que llevarte tu próximo puzzle o juego de mesa a casa sea súper fácil! Al pagar puedes elegir Nequi, Botón Bancolombia, tarjeta de crédito o débito, o PSE, todo directamente en la ventana de pago. ¡Tú eliges la opción que mejor te funcione! Además, puedes tener la tranquilidad de que todos tus pagos están protegidos y respaldados por Wompi, la pasarela de pagos de Bancolombia.</p>
+          <div class="medios" aria-label="Medios de pago"><span>Nequi</span><span>Bancolombia</span><span>Tarjeta crédito</span><span>Tarjeta débito</span><span>PSE</span></div>
+        </details>
+        <details><summary>¿Cuánto cuesta el envío?</summary>
+          <p>El costo de envío depende de tu ubicación:</p>
+          <ul style="margin:0 0 12px; color:var(--tinta-2)"><li>Bogotá y Soacha: $10.000</li><li>Resto del país: $17.000</li></ul>
+          <p>No tienes que calcular nada: cuando escribes tu dirección en el carrito, el valor del envío se suma automáticamente al total antes de pagar.</p>
+        </details>
+        <details><summary>¿Cuánto tarda en llegar?</summary><p>Todos nuestros despachos tardan entre 3 y 4 días hábiles en llegar a tu destino. Ten en cuenta que los días hábiles no incluyen fines de semana ni festivos. Tan pronto entreguemos tu pedido a la transportadora, te enviaremos un mensaje con el enlace de rastreo para que sepas exactamente cuándo llega tu diversión.</p></details>
+        <details><summary>¿Qué pasa si el juego llega dañado o incompleto?</summary><p>¡Queremos que tu experiencia de juego sea perfecta! Si por alguna razón tu pedido llega dañado o incompleto, avísanos de inmediato y te cambiamos el juego por uno nuevo, sin costo, para que la diversión no se detenga. Solo escríbenos por mensaje directo a nuestro Instagram <a href="https://www.instagram.com/ludorajuegos/" target="_blank" rel="noopener" style="font-weight:700; color:var(--coral-osc)">@ludorajuegos</a> con fotos del inconveniente y nosotros nos encargamos del resto.</p></details>
+        <details><summary>¿Puedo retractarme de la compra?</summary><p>¡Claro que sí! Si cambiaste de opinión, la ley colombiana te protege. Tienes 5 días hábiles desde que recibes tu paquete para ejercer tu derecho de retracto y pedir el reintegro de tu dinero. Solo te pedimos un favor gigante: el juego debe volver a nuestras manos intacto, con su sellado original y sin abrir, tal cual como te llegó. Recuerda que el costo del envío de regreso corre por tu cuenta.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <div>
+      <div class="marca" aria-hidden="true"><span style="color:var(--coral)">L</span><span style="color:var(--mostaza)">u</span><span style="color:var(--turquesa)">d</span><span style="color:var(--lila)">o</span><span style="color:var(--naranja)">r</span><span style="color:var(--rosa)">a</span></div>
+      <p style="margin:12px 0 0; max-width:40ch">Juegos de mesa y puzzles para toda la familia, con envío a toda Colombia.</p>
+    </div>
+    <div>
+      <h4>Mira los videos</h4>
+      <ul>
+        <li><a href="https://www.tiktok.com/@ludorajuegos" target="_blank" rel="noopener">TikTok</a></li>
+        <li><a href="https://www.instagram.com/ludorajuegos/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.youtube.com/@Ludorajuegos" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61595236935607" target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Ayuda</h4>
+      <ul>
+        <li><a href="./#como-comprar">Cómo comprar</a></li>
+        <li><a href="./#quienes-somos">Quiénes somos</a></li>
+        <li><a href="./#preguntas">Envíos y devoluciones</a></li>
+        <li><a href="https://www.instagram.com/ludorajuegos/" target="_blank" rel="noopener">Escríbenos por Instagram</a></li>
+      </ul>
+    </div>
+    <p class="legal">© <span id="anio"></span> Ludora. Juegos de mesa y puzzles para toda la familia.</p>
+  </div>
+</footer>
+
+<button type="button" class="barra-carrito" id="barra-carrito" aria-label="Ver carrito" tabindex="-1">
+  <span id="barra-texto">0 productos</span><span>Ver carrito</span>
+</button>
+
+<dialog class="carrito" id="carrito" aria-labelledby="titulo-carrito">
+  <div class="cabeza">
+    <h2 id="titulo-carrito">Tu carrito</h2>
+    <button type="button" class="cerrar" id="cerrar-carrito" aria-label="Cerrar carrito">×</button>
+  </div>
+  <ul class="lista" id="lista-carrito"></ul>
+  <div class="resumen" id="resumen-carrito"></div>
+</dialog>
+
+<script src="productos.js"></script>
+<script src="https://checkout.wompi.co/widget.js"></script>
+<script>
+/* No necesitas editar este archivo para agregar juegos: hazlo en productos.js */
+const PORTADA = ["tiburon", "oruga", "inodoro-loco", "boom-balloon"]; // juegos que salen en la portada
+const DESTACADOS = PORTADA.concat(["uno-attack", "buster", "blast-cup", "pizza"]); // salen primero en "Destacados"
+
+const $ = id => document.getElementById(id);
+const INICIO = location.pathname; // funciona igual abierta en el computador o publicada
+document.querySelectorAll('a[href^="./"]').forEach(a => a.setAttribute("href", INICIO + a.getAttribute("href").slice(2)));
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pesos = n => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+const quitarTildes = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const VISIBLES = JUEGOS.filter(j => j.precio > 0);
+const buscarJ = id => VISIBLES.find(j => j.id === id);
+const color = j => (GRUPOS[j.grupo] || {}).color || "#8B6CF0";
+const nombreGrupo = j => (GRUPOS[j.grupo] || {}).nombre || "";
+const disponible = j => j.inventario == null || j.inventario > 0;
+const maximo = j => j.inventario == null ? 10 : Math.min(10, j.inventario);
+const enlace = id => `?juego=${encodeURIComponent(id)}`;
+
+function foto(j, i = 0, carga = "lazy") {
+  const src = j.fotos && j.fotos[i];
+  return src ? `<img src="${esc(src)}" alt="${esc(j.nombre)}" loading="${carga}" decoding="async">`
+             : `<span class="sin-foto" style="--c:${color(j)}" aria-hidden="true">${esc(j.nombre.replace(/[¿?]/g, "").charAt(0))}</span>`;
+}
+const chip = j => `<span class="chip" style="--c:${color(j)}"><i></i>${esc(nombreGrupo(j))}</span>`;
+
+/* ---------- Carrito ---------- */
+let carrito = {};
+try { carrito = JSON.parse(localStorage.getItem("ludora-carrito") || "{}") || {}; } catch { carrito = {}; }
+const unidades = () => Object.values(carrito).reduce((a, b) => a + b, 0);
+const subtotal = () => Object.entries(carrito).reduce((s, [id, c]) => s + (buscarJ(id)?.precio || 0) * c, 0);
+function guardar() {
+  for (const id in carrito) {
+    const j = buscarJ(id);
+    if (!j || !disponible(j) || carrito[id] < 1) delete carrito[id];
+    else carrito[id] = Math.min(carrito[id], maximo(j));
+  }
+  try { localStorage.setItem("ludora-carrito", JSON.stringify(carrito)); } catch {}
+  pintarContador();
+  if ($("carrito").open) pintarCarrito();
+}
+function pintarContador() {
+  const n = unidades();
+  $("cuenta").textContent = n;
+  const barra = $("barra-carrito");
+  barra.classList.toggle("visible", n > 0);
+  barra.tabIndex = n > 0 ? 0 : -1;
+  document.body.classList.toggle("con-barra", n > 0);
+  $("barra-texto").textContent = `${n} ${n === 1 ? "producto" : "productos"} · ${pesos(subtotal())}`;
+}
+function agregar(id) {
+  const j = buscarJ(id);
+  if (!j || !disponible(j)) return;
+  if ((carrito[id] || 0) >= maximo(j)) { aviso("No hay más unidades disponibles"); return; }
+  carrito[id] = (carrito[id] || 0) + 1;
+  guardar();
+  const c = $("cuenta"); c.classList.remove("salta"); void c.offsetWidth; c.classList.add("salta");
+  aviso(`${j.nombre} agregado al carrito`);
+}
+function botonAgregar(j, ancho = false) {
+  if (!disponible(j)) return `<span class="boton${ancho ? " ancho" : ""}" aria-disabled="true">Agotado</span>`;
+  return `<button type="button" class="boton${ancho ? " ancho" : ""}" data-agregar="${esc(j.id)}">Agregar</button>`;
+}
+
+let errorPago = "";
+let paso = "carrito"; // "carrito" o "datos"
+const DEPARTAMENTOS = ["Bogotá D.C.", "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá", "Caldas", "Caquetá", "Casanare",
+  "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño",
+  "Norte de Santander", "Putumayo", "Quindío", "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima",
+  "Valle del Cauca", "Vaupés", "Vichada"];
+const CAMPOS = ["nombre", "cedula", "celular", "correo", "departamento", "ciudad", "direccion", "barrio", "localidad", "especificaciones"];
+let datos = {};
+try { datos = JSON.parse(sessionStorage.getItem("ludora-datos") || "{}") || {}; } catch { datos = {}; }
+let erroresCampo = {};
+
+// Bogotá y Soacha pagan el envío local; todo lo demás, el nacional.
+function zonaDe(d) {
+  const ciudad = quitarTildes(d.ciudad || "").trim();
+  if (d.departamento === "Bogotá D.C." || ciudad.startsWith("bogota") || ciudad === "soacha") return "bogota";
+  return d.departamento ? "nacional" : null;
+}
+const valorEnvio = () => { const z = zonaDe(datos); return z ? ENVIOS[z].valor : null; };
+
+function pintarCarrito() {
+  $("titulo-carrito").textContent = paso === "datos" ? "Datos de envío" : "Tu carrito";
+  const items = Object.entries(carrito);
+  if (!items.length) {
+    paso = "carrito"; $("titulo-carrito").textContent = "Tu carrito";
+    $("lista-carrito").innerHTML = `<li class="vacio-c">Tu carrito está vacío.<br>Agrega un juego para empezar.</li>`;
+    $("resumen-carrito").innerHTML = `<button type="button" class="boton ancho" data-cerrar>Ver los juegos</button>`;
+    return;
+  }
+  if (paso === "datos") { pintarDatos(); return; }
+  $("lista-carrito").innerHTML = items.map(([id, c]) => {
+    const j = buscarJ(id);
+    return `<li class="item">
+      <div class="mini">${foto(j, 0, "eager")}</div>
+      <div>
+        <h3>${esc(j.nombre)}</h3>
+        <div class="fila">
+          <span class="cantidad">
+            <button type="button" data-menos="${esc(id)}" aria-label="Quitar una unidad de ${esc(j.nombre)}">−</button>
+            <span>${c}</span>
+            <button type="button" data-mas="${esc(id)}" aria-label="Agregar una unidad de ${esc(j.nombre)}">+</button>
+          </span>
+          <b>${pesos(j.precio * c)}</b>
+        </div>
+        <button type="button" class="quitar" data-quitar="${esc(id)}">Quitar</button>
+      </div>
+    </li>`;
+  }).join("");
+  $("resumen-carrito").innerHTML = `
+    <div class="linea-res"><span>Subtotal</span><span>${pesos(subtotal())}</span></div>
+    <div class="linea-res"><span>Envío</span><span>Se calcula en el siguiente paso</span></div>
+    <p class="nota" style="margin:2px 0 0; text-align:left">Bogotá y Soacha ${pesos(ENVIOS.bogota.valor)}. Resto del país ${pesos(ENVIOS.nacional.valor)}.</p>
+    <button type="button" class="boton ancho" id="continuar" style="margin-top:12px">Continuar con el envío</button>
+    <p class="nota">Pago seguro con Wompi: Nequi, Bancolombia, tarjeta o PSE.</p>`;
+  $("continuar").addEventListener("click", () => { paso = "datos"; errorPago = ""; pintarCarrito(); $("lista-carrito").scrollTop = 0; });
+}
+
+function campo(id, etiqueta, { tipo = "text", ayuda = "", opcional = false, attrs = "" } = {}) {
+  const err = erroresCampo[id];
+  return `<div class="campo${err ? " con-error" : ""}">
+    <label for="f-${id}">${etiqueta}${opcional ? ' <span class="opcional">(opcional)</span>' : ""}</label>
+    <input id="f-${id}" name="${id}" type="${tipo}" value="${esc(datos[id] || "")}" ${opcional ? "" : "required"} ${attrs}
+      ${err ? `aria-invalid="true" aria-describedby="e-${id}"` : ayuda ? `aria-describedby="a-${id}"` : ""}>
+    ${err ? `<small class="error-campo" id="e-${id}">${esc(err)}</small>` : ayuda ? `<small class="ayuda" id="a-${id}">${ayuda}</small>` : ""}
+  </div>`;
+}
+
+function pintarDatos() {
+  const envio = valorEnvio();
+  $("lista-carrito").innerHTML = `<li class="form-datos">
+    <form id="form-datos" novalidate>
+      <button type="button" class="volver-carrito" id="volver-carrito">← Volver al carrito</button>
+      <fieldset><legend>¿Quién recibe?</legend>
+        ${campo("nombre", "Nombre completo", { attrs: 'autocomplete="name"' })}
+        ${campo("cedula", "Número de cédula", { attrs: 'inputmode="numeric" autocomplete="off" maxlength="10"' })}
+        ${campo("celular", "Celular", { tipo: "tel", attrs: 'inputmode="numeric" autocomplete="tel-national" maxlength="10"', ayuda: "Te escribimos aquí con el enlace de rastreo." })}
+        ${campo("correo", "Correo electrónico", { tipo: "email", attrs: 'autocomplete="email"', ayuda: "Aquí te llega la confirmación del pago." })}
+      </fieldset>
+      <fieldset><legend>¿A dónde lo enviamos?</legend>
+        <div class="campo${erroresCampo.departamento ? " con-error" : ""}">
+          <label for="f-departamento">Departamento</label>
+          <select id="f-departamento" name="departamento" required ${erroresCampo.departamento ? 'aria-invalid="true" aria-describedby="e-departamento"' : ""}>
+            <option value="">Elige tu departamento</option>
+            ${DEPARTAMENTOS.map(d => `<option ${datos.departamento === d ? "selected" : ""}>${d}</option>`).join("")}
+          </select>
+          ${erroresCampo.departamento ? `<small class="error-campo" id="e-departamento">${esc(erroresCampo.departamento)}</small>` : ""}
+        </div>
+        ${campo("ciudad", "Ciudad o municipio", { attrs: 'autocomplete="address-level2"' })}
+        ${campo("direccion", "Dirección", { attrs: 'autocomplete="address-line1" placeholder="Ej: Calle 123 # 45-67"' })}
+        ${campo("barrio", "Barrio")}
+        ${campo("localidad", "Localidad", { opcional: true, ayuda: "Solo si vives en Bogotá. Ej: Suba, Kennedy." })}
+        ${campo("especificaciones", "Especificaciones", { opcional: true, attrs: 'placeholder="Conjunto, torre, interior, casa, apto…"' })}
+      </fieldset>
+    </form>
+  </li>`;
+  $("resumen-carrito").innerHTML = `
+    ${errorPago ? `<p class="error" role="alert">${esc(errorPago)}</p>` : ""}
+    <div class="linea-res"><span>Subtotal</span><span>${pesos(subtotal())}</span></div>
+    <div class="linea-res"><span>Envío${zonaDe(datos) ? ` (${ENVIOS[zonaDe(datos)].nombre})` : ""}</span><span>${envio == null ? "Elige tu departamento" : pesos(envio)}</span></div>
+    <div class="linea-res total"><span>Total</span><span>${pesos(subtotal() + (envio || 0))}</span></div>
+    <button type="submit" form="form-datos" class="boton ancho" id="pagar">Ir a pagar ${envio == null ? "" : pesos(subtotal() + envio)}</button>
+    <p class="nota">Pago seguro con Wompi: Nequi, Bancolombia, tarjeta o PSE.</p>`;
+  const f = $("form-datos");
+  $("volver-carrito").addEventListener("click", () => { paso = "carrito"; errorPago = ""; pintarCarrito(); });
+  f.addEventListener("input", e => {
+    const n = e.target.name; if (!n) return;
+    datos[n] = e.target.value;
+    if (n === "departamento" && datos.departamento === "Bogotá D.C." && !datos.ciudad) { datos.ciudad = "Bogotá"; $("f-ciudad").value = "Bogotá"; }
+    if (erroresCampo[n]) { delete erroresCampo[n]; const c = e.target.closest(".campo"); c.classList.remove("con-error"); c.querySelector(".error-campo")?.remove(); e.target.removeAttribute("aria-invalid"); }
+    try { sessionStorage.setItem("ludora-datos", JSON.stringify(datos)); } catch {}
+    if (n === "departamento" || n === "ciudad") actualizarTotales();
+  });
+  f.addEventListener("submit", e => { e.preventDefault(); pagar(); });
+}
+function actualizarTotales() {
+  const envio = valorEnvio();
+  const filas = $("resumen-carrito").querySelectorAll(".linea-res span:last-child");
+  const z = zonaDe(datos);
+  $("resumen-carrito").querySelectorAll(".linea-res")[1].firstElementChild.textContent = `Envío${z ? ` (${ENVIOS[z].nombre})` : ""}`;
+  filas[1].textContent = envio == null ? "Elige tu departamento" : pesos(envio);
+  filas[2].textContent = pesos(subtotal() + (envio || 0));
+  $("pagar").textContent = `Ir a pagar ${envio == null ? "" : pesos(subtotal() + envio)}`;
+}
+function validar() {
+  const d = {}; CAMPOS.forEach(k => d[k] = String(datos[k] || "").trim());
+  const e = {};
+  if (d.nombre.split(/\s+/).length < 2) e.nombre = "Escribe tu nombre y apellido.";
+  if (!/^\d{5,10}$/.test(d.cedula.replace(/[.\s]/g, ""))) e.cedula = "Escribe tu cédula solo con números.";
+  if (!/^3\d{9}$/.test(d.celular.replace(/\s/g, ""))) e.celular = "Escribe un celular de 10 dígitos que empiece por 3.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.correo)) e.correo = "Escribe un correo válido, por ejemplo nombre@gmail.com.";
+  if (!d.departamento) e.departamento = "Elige tu departamento.";
+  if (!d.ciudad) e.ciudad = "Escribe tu ciudad o municipio.";
+  if (d.direccion.length < 6) e.direccion = "Escribe la dirección completa.";
+  if (!d.barrio) e.barrio = "Escribe tu barrio.";
+  d.cedula = d.cedula.replace(/[.\s]/g, ""); d.celular = d.celular.replace(/\s/g, "");
+  return { d, e };
+}
+function abrirCarrito() { errorPago = ""; paso = "carrito"; pintarCarrito(); $("carrito").showModal(); }
+
+async function pagar() {
+  const { d, e } = validar();
+  erroresCampo = e;
+  if (Object.keys(e).length) {
+    errorPago = "Revisa los datos marcados en rojo.";
+    pintarDatos();
+    const primero = document.querySelector('[aria-invalid="true"]'); primero?.focus();
+    return;
+  }
+  errorPago = "";
+  const b = $("pagar"); b.disabled = true; b.textContent = "Preparando el pago…";
+  try {
+    const items = Object.entries(carrito).map(([id, cantidad]) => ({ id, cantidad }));
+    const r = await fetch("/.netlify/functions/firmar", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items, envio: { departamento: d.departamento, ciudad: d.ciudad } }) });
+    const res = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(res.error || "No pudimos preparar el pago. Intenta de nuevo en un momento.");
+    if (typeof WidgetCheckout === "undefined") throw new Error("La ventana de pago no cargó. Revisa tu conexión y vuelve a intentarlo.");
+    // Todo lo de la entrega va en la línea de dirección para que lo veas completo en tu panel de Wompi.
+    const linea = [d.direccion, `Barrio ${d.barrio}`, d.localidad && `Localidad ${d.localidad}`, d.especificaciones].filter(Boolean).join(" | ");
+    $("carrito").close();
+    new WidgetCheckout({
+      currency: "COP", amountInCents: res.montoEnCentavos, reference: res.referencia, publicKey: res.llavePublica,
+      signature: { integrity: res.firma }, redirectUrl: location.origin + location.pathname + "?gracias=1",
+      customerData: { email: d.correo, fullName: d.nombre, phoneNumber: d.celular, phoneNumberPrefix: "+57", legalId: d.cedula, legalIdType: "CC" },
+      shippingAddress: { addressLine1: linea, city: d.ciudad, region: d.departamento, country: "CO", phoneNumber: d.celular, name: d.nombre }
+    }).open(rr => {
+      const t = rr && rr.transaction;
+      if (t && (t.status === "APPROVED" || t.status === "PENDING")) { carrito = {}; guardar(); mostrarGracias(); }
+    });
+  } catch (err) {
+    errorPago = err.message === "Failed to fetch" ? "El pago se activa cuando la página esté publicada en internet." : err.message;
+    pintarDatos();
+  }
+}
+
+/* ---------- Catálogo ---------- */
+let filtro = "todos", texto = "", orden = "destacados";
+function tarjeta(j) {
+  return `<article class="tarjeta">
+    <a class="foto" href="${enlace(j.id)}" aria-label="Ver ${esc(j.nombre)}">
+      ${foto(j)}${chip(j)}${disponible(j) ? "" : `<span class="agotado-sello">Agotado</span>`}
+    </a>
+    <div class="cuerpo">
+      <h3><a href="${enlace(j.id)}">${esc(j.nombre)}</a></h3>
+      ${j.nombreOriginal ? `<span class="original">${esc(j.nombreOriginal)}</span>` : ""}
+      ${j.jugadores ? `<span class="datos"><svg aria-hidden="true"><use href="#i-gente"/></svg>${esc(jugadoresTexto(j))}</span>` : ""}
+      <div class="pie-tarjeta"><span class="precio">${pesos(j.precio)}</span>${botonAgregar(j)}</div>
+    </div>
+  </article>`;
+}
+const GRUPO_PUZZLES = "puzzle-habilidad-mental";
+const esPuzzle = j => j.grupo === GRUPO_PUZZLES;
+const JUEGOS_MESA = VISIBLES.filter(j => !esPuzzle(j));
+const PUZZLES = VISIBLES.filter(esPuzzle);
+const textoBusqueda = j => quitarTildes([j.nombre, j.nombreOriginal, j.descripcion, j.desarrolla, nombreGrupo(j), j.jugadores].join(" "));
+function coincide(j, q) {
+  const palabras = quitarTildes(q).split(/\s+/).filter(Boolean);
+  const t = textoBusqueda(j);
+  return palabras.every(p => t.includes(p));
+}
+function puntaje(j, q) {
+  const n = quitarTildes(j.nombre + " " + j.nombreOriginal), qq = quitarTildes(q.trim());
+  return n.startsWith(qq) ? 0 : n.includes(qq) ? 1 : 2;
+}
+const buscarProductos = q => VISIBLES.filter(j => coincide(j, q)).sort((a, b) => puntaje(a, q) - puntaje(b, q) || (disponible(b) - disponible(a)));
+function ordenar(lista) {
+  const pos = id => { const i = DESTACADOS.indexOf(id); return i < 0 ? 999 : i; };
+  if (orden === "menor") lista.sort((a, b) => a.precio - b.precio);
+  else if (orden === "mayor") lista.sort((a, b) => b.precio - a.precio);
+  else if (orden === "nombre") lista.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+  else lista.sort((a, b) => (disponible(b) - disponible(a)) || (pos(a.id) - pos(b.id)) || (!!b.fotos.length - !!a.fotos.length));
+  return lista;
+}
+const jugadoresTexto = j => { const t = j.jugadores.replace(/\s*\(.*\)/, ""); return t === "1" ? "1 jugador" : `${t} jugadores`; };
+const cuenta = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+function pintarCatalogo() {
+  const q = texto.trim();
+  const buscando = !!q;
+  $("titulo-juegos").textContent = buscando ? `Resultados para "${q}"` : "Juegos de mesa";
+  $("intro-juegos").classList.toggle("oculto", buscando);
+  $("aviso-busqueda").classList.toggle("oculto", !buscando);
+  $("filtros").classList.toggle("oculto", buscando);
+  $("puzzles").classList.toggle("oculto", buscando);
+  let lista;
+  if (buscando) {
+    lista = orden === "destacados" ? buscarProductos(q) : ordenar(buscarProductos(q));
+    $("resultado").textContent = cuenta(lista.length, "resultado", "resultados");
+  } else {
+    lista = ordenar(JUEGOS_MESA.filter(j => filtro === "todos" || j.grupo === filtro));
+    $("resultado").textContent = cuenta(lista.length, "juego", "juegos");
+  }
+  $("rejilla").innerHTML = lista.length ? lista.map(tarjeta).join("") :
+    `<div class="vacio"><p>No encontramos nada con "${esc(q)}". Prueba con otra palabra, como "pingüino", "cartas" o "equilibrio".</p>
+     <button type="button" class="boton secundario" data-quitar-busqueda>Ver todos los juegos</button></div>`;
+  if (!buscando) {
+    const ps = ordenar(PUZZLES.slice());
+    $("resultado-puzzles").textContent = cuenta(ps.length, "puzzle", "puzzles");
+    $("rejilla-puzzles").innerHTML = ps.map(tarjeta).join("");
+  }
+}
+function pintarFiltros() {
+  const usados = Object.keys(GRUPOS).filter(g => g !== GRUPO_PUZZLES && JUEGOS_MESA.some(j => j.grupo === g));
+  $("filtros").innerHTML = [["todos", "Todos", null, JUEGOS_MESA.length], ...usados.map(g => [g, GRUPOS[g].nombre, GRUPOS[g].color, JUEGOS_MESA.filter(j => j.grupo === g).length])]
+    .map(([g, n, c, k]) => `<button type="button" data-filtro="${g}" aria-pressed="${g === filtro}" ${c ? `style="--c:${c}"` : ""}>${c ? "<i></i>" : ""}${esc(n)} <small>${k}</small></button>`).join("");
+}
+const COLLAGE_QUIENES = ["uno-attack", "puzzle-cast-fish-puzzle", "puzzle-cast-heart", "buster"];
+function pintarCollageQuienes() {
+  const el = $("collage-yo"); if (!el) return;
+  el.innerHTML = COLLAGE_QUIENES.map(buscarJ).filter(Boolean).map(j =>
+    `<a href="${enlace(j.id)}" style="--c:${color(j)}" tabindex="-1">${foto(j, 0, "eager")}</a>`).join("");
+}
+function pintarCollage() {
+  $("collage").innerHTML = PORTADA.map(buscarJ).filter(Boolean).map(j =>
+    `<a href="${enlace(j.id)}" style="--c:${color(j)}" aria-label="${esc(j.nombre)}">${foto(j, 0, "eager")}</a>`).join("");
+}
+
+/* ---------- Detalle ---------- */
+function pintarDetalle(j) {
+  document.title = `${j.nombre} · Ludora`;
+  const fotos = j.fotos || [];
+  $("detalle").innerHTML = `
+    <div class="galeria">
+      <div class="grande" id="foto-grande">${foto(j, 0, "eager")}</div>
+      ${fotos.length > 1 ? `<div class="miniaturas">${fotos.map((f, i) =>
+        `<button type="button" data-foto="${i}" aria-label="Ver foto ${i + 1}" aria-current="${i === 0}"><img src="${esc(f)}" alt=""></button>`).join("")}</div>` : ""}
+    </div>
+    <div class="info" style="--c:${color(j)}">
+      ${chip(j)}
+      <h1>${esc(j.nombre)}</h1>
+      ${j.nombreOriginal ? `<span class="original">${esc(j.nombreOriginal)}</span>` : ""}
+      <span class="precio">${pesos(j.precio)}</span>
+      <ul class="fichas">
+        <li><small>Jugadores</small><b>${esc(j.jugadores || "—")}</b></li>
+        <li><small>Disponibilidad</small><b>${disponible(j) ? "Disponible" : "Agotado"}</b></li>
+      </ul>
+      <p class="descripcion">${esc(j.descripcion)}</p>
+      ${j.desarrolla ? `<p class="desarrolla"><b>Desarrolla:</b> ${esc(j.desarrolla)}</p>` : ""}
+      <div class="compra">${botonAgregar(j)}<button type="button" class="boton secundario" data-abrir-carrito>Ver carrito</button></div>
+      <ul class="garantias">
+        <li><svg aria-hidden="true"><use href="#i-candado"/></svg>Pago seguro con Wompi</li>
+        <li><svg aria-hidden="true"><use href="#i-camion"/></svg>Envío a toda Colombia</li>
+      </ul>
+    </div>`;
+  // Primero los del mismo grupo y luego otros parecidos (juegos con juegos, puzzles con puzzles), hasta 16
+  const base = VISIBLES.filter(x => x.id !== j.id && disponible(x));
+  const mismo = base.filter(x => x.grupo === j.grupo);
+  const resto = base.filter(x => x.grupo !== j.grupo && esPuzzle(x) === esPuzzle(j));
+  const mezcla = arr => arr.map(x => [((x.id + j.id).split("").reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7)), x]).sort((a, b) => a[0] - b[0]).map(p => p[1]);
+  const otros = [...mezcla(mismo), ...mezcla(resto)].slice(0, 16);
+  $("relacionados").innerHTML = otros.length ? `
+    <div class="carrusel-cabeza">
+      <h2>También te puede gustar</h2>
+      <div class="flechas"><button type="button" id="car-ant" aria-label="Ver anteriores">‹</button><button type="button" id="car-sig" aria-label="Ver más juegos">›</button></div>
+    </div>
+    <div class="pista" id="pista" aria-label="Juegos sugeridos">${otros.map(tarjeta).join("")}</div>
+    <div class="puntos" id="puntos" aria-hidden="true"></div>` : "";
+  if (otros.length) iniciarCarrusel();
+}
+
+function iniciarCarrusel() {
+  const pista = $("pista");
+  const paginas = () => 1 + Math.max(0, Math.ceil((pista.scrollWidth - pista.clientWidth - 24) / pista.clientWidth));
+  const actual = () => Math.round(pista.scrollLeft / pista.clientWidth);
+  const pintar = () => {
+    const n = paginas(), a = Math.min(actual(), n - 1);
+    $("car-ant").disabled = pista.scrollLeft < 8;
+    $("car-sig").disabled = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 8;
+    $("puntos").innerHTML = n > 1 ? Array.from({ length: n }, (_, i) => `<span class="${i === a ? "activo" : ""}"></span>`).join("") : "";
+  };
+  $("car-ant").addEventListener("click", () => pista.scrollBy({ left: -pista.clientWidth, behavior: "smooth" }));
+  $("car-sig").addEventListener("click", () => pista.scrollBy({ left: pista.clientWidth, behavior: "smooth" }));
+  pista.addEventListener("scroll", () => requestAnimationFrame(pintar), { passive: true });
+  window.addEventListener("resize", pintar);
+  pintar();
+}
+
+/* ---------- Vistas ---------- */
+function mostrarGracias() {
+  ["vista-catalogo", "vista-detalle"].forEach(id => $(id).classList.add("oculto"));
+  $("vista-gracias").classList.remove("oculto");
+  document.title = "Gracias por tu compra · Ludora";
+  scrollTo(0, 0);
+}
+function mostrar() {
+  const p = new URLSearchParams(location.search);
+  if (p.get("gracias")) { carrito = {}; guardar(); mostrarGracias(); return; }
+  const j = p.get("juego") && buscarJ(p.get("juego"));
+  if (!j && p.get("buscar")) { texto = p.get("buscar"); $("buscar").value = texto; $("limpiar").classList.remove("oculto"); }
+  $("vista-catalogo").classList.toggle("oculto", !!j);
+  $("vista-detalle").classList.toggle("oculto", !j);
+  if (j) { pintarDetalle(j); arriba(); }
+  else { document.title = "Ludora · Juegos para toda la familia"; pintarCatalogo(); }
+}
+/* Ir a la ficha sin recargar: siempre se abre arriba, y al volver regresa a donde estabas */
+try { history.scrollRestoration = "manual"; } catch {}
+const arriba = () => { document.documentElement.style.scrollBehavior = "auto"; window.scrollTo(0, 0); requestAnimationFrame(() => { window.scrollTo(0, 0); document.documentElement.style.scrollBehavior = ""; }); };
+let posCatalogo = 0;
+function abrirJuego(id) {
+  if (!$("vista-catalogo").classList.contains("oculto")) posCatalogo = window.scrollY;
+  try { history.pushState({ juego: id }, "", `${INICIO}?juego=${encodeURIComponent(id)}`); } catch {}
+  $("vista-catalogo").classList.add("oculto"); $("vista-gracias").classList.add("oculto");
+  $("vista-detalle").classList.remove("oculto");
+  pintarDetalle(buscarJ(id)); arriba();
+}
+function volverCatalogo(destino) {
+  try { history.pushState({}, "", INICIO + (destino ? "#" + destino : "")); } catch {}
+  $("vista-detalle").classList.add("oculto"); $("vista-catalogo").classList.remove("oculto");
+  document.title = "Ludora · Juegos para toda la familia"; pintarCatalogo();
+  document.documentElement.style.scrollBehavior = "auto";
+  if (destino) $(destino)?.scrollIntoView(); else window.scrollTo(0, posCatalogo);
+  document.documentElement.style.scrollBehavior = "";
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[href]");
+  if (!a || e.ctrlKey || e.metaKey || e.shiftKey || a.target === "_blank") return;
+  const url = new URL(a.href, location.href);
+  if (url.pathname !== location.pathname) return;
+  const id = url.searchParams.get("juego");
+  if (id && buscarJ(id)) { e.preventDefault(); cerrarSugerencias?.(); abrirJuego(id); return; }
+  if (a.classList.contains("volver")) { e.preventDefault(); volverCatalogo(""); return; }
+  if (!url.search && url.hash && !$("vista-detalle").classList.contains("oculto")) { e.preventDefault(); volverCatalogo(url.hash.slice(1)); }
+}, true);
+window.addEventListener("popstate", () => { const enDetalle = new URLSearchParams(location.search).get("juego"); mostrar(); if (!enDetalle) { document.documentElement.style.scrollBehavior = "auto"; window.scrollTo(0, posCatalogo); document.documentElement.style.scrollBehavior = ""; } });
+
+function aviso(t) {
+  document.querySelectorAll(".toast").forEach(x => x.remove());
+  const el = document.createElement("div");
+  el.className = "toast"; el.setAttribute("role", "status");
+  el.innerHTML = `<svg aria-hidden="true"><use href="#i-check"/></svg>${esc(t)}`;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 2200);
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  const d = b.dataset;
+  if (d.agregar) agregar(d.agregar);
+  else if (d.mas) { const j = buscarJ(d.mas); if (carrito[d.mas] >= maximo(j)) aviso("No hay más unidades disponibles"); else { carrito[d.mas]++; guardar(); } }
+  else if (d.menos) { carrito[d.menos]--; guardar(); }
+  else if (d.quitar) { delete carrito[d.quitar]; guardar(); }
+  else if ("cerrar" in d) { $("carrito").close(); if (!$("vista-catalogo").classList.contains("oculto")) $("juegos").scrollIntoView(); else location.href = INICIO + "#juegos"; }
+  else if ("abrirCarrito" in d) abrirCarrito();
+  else if (d.filtro) { filtro = d.filtro; pintarFiltros(); pintarCatalogo(); }
+  else if (d.foto) {
+    const j = buscarJ(new URLSearchParams(location.search).get("juego"));
+    $("foto-grande").innerHTML = foto(j, +d.foto, "eager");
+    document.querySelectorAll(".miniaturas button").forEach(x => x.setAttribute("aria-current", x === b));
+  }
+});
+/* ---------- Buscador del encabezado ---------- */
+const enCatalogo = () => !$("vista-catalogo").classList.contains("oculto");
+let sugActiva = -1;
+function cerrarSugerencias() { $("sugerencias").classList.add("oculto"); $("buscar").setAttribute("aria-expanded", "false"); sugActiva = -1; }
+function pintarSugerencias() {
+  const q = $("buscar").value.trim();
+  $("limpiar").classList.toggle("oculto", !q);
+  if (q.length < 2) { cerrarSugerencias(); return; }
+  const res = buscarProductos(q);
+  $("sugerencias").innerHTML = res.length
+    ? res.slice(0, 6).map((j, i) => `<li role="option" id="sug-${i}"><a href="${enlace(j.id)}"><span class="mini">${foto(j)}</span><span><b>${esc(j.nombre)}</b><small>${esc(nombreGrupo(j))}</small></span><span class="precio" style="font-size:15px">${pesos(j.precio)}</span></a></li>`).join("")
+      + `<li><button type="submit" class="ver-todo">Ver ${cuenta(res.length, "resultado", "resultados")}</button></li>`
+    : `<li class="nada">No encontramos "${esc(q)}". Prueba con otra palabra.</li>`;
+  $("sugerencias").classList.remove("oculto"); $("buscar").setAttribute("aria-expanded", "true"); sugActiva = -1;
+}
+function aplicarBusqueda(q) {
+  q = q.trim(); cerrarSugerencias();
+  if (!enCatalogo()) { location.href = q ? `${INICIO}?buscar=${encodeURIComponent(q)}` : INICIO + "#juegos"; return; }
+  texto = q; pintarCatalogo();
+  $("juegos").scrollIntoView({ behavior: "smooth" });
+  $("buscar").blur();
+}
+function quitarBusqueda() {
+  texto = ""; $("buscar").value = ""; $("limpiar").classList.add("oculto"); cerrarSugerencias();
+  if (new URLSearchParams(location.search).get("buscar")) history.replaceState(null, "", INICIO);
+  pintarCatalogo();
+}
+$("buscar").addEventListener("input", pintarSugerencias);
+$("buscar").addEventListener("focus", pintarSugerencias);
+$("buscar").addEventListener("keydown", e => {
+  const items = [...$("sugerencias").querySelectorAll("a")];
+  if (e.key === "Escape") { cerrarSugerencias(); return; }
+  if (!items.length || !["ArrowDown", "ArrowUp"].includes(e.key)) return;
+  e.preventDefault();
+  sugActiva = (sugActiva + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+  items.forEach((a, i) => a.classList.toggle("activo", i === sugActiva));
+  $("buscar").setAttribute("aria-activedescendant", `sug-${sugActiva}`);
+});
+$("form-buscar").addEventListener("submit", e => {
+  e.preventDefault();
+  const items = [...$("sugerencias").querySelectorAll("a")];
+  if (sugActiva >= 0 && items[sugActiva]) { location.href = items[sugActiva].href; return; }
+  aplicarBusqueda($("buscar").value);
+});
+$("limpiar").addEventListener("click", () => { quitarBusqueda(); $("buscar").focus(); });
+$("quitar-busqueda").addEventListener("click", () => { quitarBusqueda(); $("juegos").scrollIntoView(); });
+document.addEventListener("click", e => {
+  if (!e.target.closest("#form-buscar")) cerrarSugerencias();
+  if (e.target.closest("[data-quitar-busqueda]")) quitarBusqueda();
+  if (e.target.closest("#menu-movil a")) { $("menu-movil").classList.remove("abierto"); $("boton-menu").setAttribute("aria-expanded", "false"); }
+  if (e.target.closest(".menu a, #menu-movil a") && texto) quitarBusqueda();
+});
+$("boton-menu").addEventListener("click", () => {
+  const abierto = $("menu-movil").classList.toggle("abierto");
+  $("boton-menu").setAttribute("aria-expanded", abierto);
+});
+$("orden").addEventListener("change", e => { orden = e.target.value; pintarCatalogo(); });
+$("abrir-carrito").addEventListener("click", abrirCarrito);
+$("barra-carrito").addEventListener("click", abrirCarrito);
+$("cerrar-carrito").addEventListener("click", () => $("carrito").close());
+$("carrito").addEventListener("click", e => { if (e.target === $("carrito")) $("carrito").close(); });
+$("anio").textContent = new Date().getFullYear();
+
+pintarCollage();
+pintarCollageQuienes();
+pintarFiltros();
+guardar();
+mostrar();
+</script>
+</body>
+</html>
