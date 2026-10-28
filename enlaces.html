@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ludora · Enlaces</title>
+<meta name="description" content="Compra los juegos de mis videos y sígueme en todas mis redes.">
+<meta name="theme-color" content="#FFF1E6">
+<meta property="og:title" content="Ludora · Juegos para toda la familia">
+<meta property="og:description" content="Compra los juegos de mis videos y sígueme en todas mis redes.">
+<meta property="og:image" content="img/tiburon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,500..900,0..100,0..1&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tinta:#1E2A4A; --fondo:#FFF1E6; --crema:#FFE4D1;
+    --coral:#FF5A47; --mostaza:#FFB020; --turquesa:#14B8A6;
+    --lila:#8B6CF0; --naranja:#FF8A3D; --rosa:#EC4899;
+  }
+  * { box-sizing:border-box; margin:0; }
+  body {
+    min-height:100vh; background:var(--fondo); color:var(--tinta);
+    font-family:"Outfit", system-ui, sans-serif; font-size:17px;
+    display:flex; justify-content:center; padding:40px 16px 48px;
+    background-image:
+      radial-gradient(circle at 8% 10%, #FFD9C2 0 90px, transparent 91px),
+      radial-gradient(circle at 95% 85%, #FFE2B3 0 120px, transparent 121px);
+    background-attachment:fixed;
+  }
+  main { width:100%; max-width:440px; text-align:center; }
+  .marca {
+    font-family:"Fraunces", serif; font-weight:900; font-size:56px; letter-spacing:-1px;
+    line-height:1; text-decoration:none; display:inline-block;
+    font-variation-settings:"SOFT" 100, "WONK" 1;
+  }
+  .lema { margin:10px 0 22px; font-size:17px; line-height:1.45; }
+  .fotos { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:26px; }
+  .fotos img {
+    width:100%; aspect-ratio:1; object-fit:cover; border-radius:14px; background:#fff;
+    box-shadow:0 3px 0 rgba(30,42,74,.12);
+  }
+  .fotos img:nth-child(odd) { transform:rotate(-3deg); }
+  .fotos img:nth-child(even) { transform:rotate(3deg); }
+  .enlaces { display:flex; flex-direction:column; gap:12px; list-style:none; padding:0; }
+  .enlaces a {
+    display:flex; align-items:center; gap:14px; text-decoration:none;
+    background:#fff; color:var(--tinta); font-weight:600; font-size:17px;
+    padding:15px 18px; border-radius:18px; border:2px solid var(--tinta);
+    box-shadow:0 4px 0 var(--tinta); transition:transform .12s, box-shadow .12s;
+  }
+  .enlaces a:hover { transform:translateY(-2px); box-shadow:0 6px 0 var(--tinta); }
+  .enlaces a:active { transform:translateY(3px); box-shadow:0 1px 0 var(--tinta); }
+  .enlaces a span { flex:1; text-align:left; }
+  .enlaces a small { display:block; font-weight:400; font-size:14px; opacity:.75; }
+  .enlaces svg { width:26px; height:26px; flex:none; }
+  .icono { width:44px; height:44px; border-radius:12px; display:grid; place-items:center; color:#fff; flex:none; }
+  .enlaces a.principal { background:var(--coral); color:#fff; font-size:19px; padding:18px; }
+  .enlaces a.principal .icono { background:#fff; color:var(--coral); width:50px; height:50px; box-shadow:0 0 0 4px rgba(255,255,255,.35); }
+  .enlaces a.principal .icono svg { width:30px; height:30px; }
+  .icono-compra { animation:latido 1.8s ease-in-out infinite; }
+  @keyframes latido { 0%,100% { transform:scale(1) rotate(0); } 15% { transform:scale(1.14) rotate(-8deg); } 30% { transform:scale(1) rotate(0); } 45% { transform:scale(1.08) rotate(6deg); } 60% { transform:scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .icono-compra { animation:none; } }
+  .marca-red { width:24px; height:24px; filter:invert(1); }
+  .enlaces a.principal small { opacity:.9; }
+  .flecha { opacity:.5; }
+  .pie { margin-top:30px; font-size:14px; opacity:.7; }
+  a:focus-visible { outline:3px solid var(--lila); outline-offset:3px; }
+</style>
+</head>
+<body>
+<main>
+  <a class="marca" href="index.html" aria-label="Ludora, ir a la tienda">
+    <span style="color:var(--coral)">L</span><span style="color:var(--mostaza)">u</span><span style="color:var(--turquesa)">d</span><span style="color:var(--lila)">o</span><span style="color:var(--naranja)">r</span><span style="color:var(--rosa)">a</span>
+  </a>
+  <p class="lema">Lo viste en mis videos, aquí lo llevas a casa.<br>Envío a toda Colombia 🎲</p>
+
+  <div class="fotos" aria-hidden="true">
+    <img src="img/uno-spin.jpg" alt="">
+    <img src="img/puzzle-cast-atom.jpg" alt="">
+    <img src="img/cubo-expresiones.jpg" alt="">
+    <img src="img/puzzle-erizo-en-la-jaula.jpg" alt="">
+  </div>
+
+  <ul class="enlaces">
+    <li><a class="principal" href="index.html">
+      <div class="icono icono-compra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h3l2.4 11.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.6" fill="currentColor"/><circle cx="17" cy="20" r="1.6" fill="currentColor"/><path d="M13.5 2.5v3M10.5 4l1.5 1.5M16.5 4 15 5.5" stroke-width="2"/></svg></div>
+      <span>Compra tus juegos aquí<small>Paga seguro en la página</small></span><b class="flecha">›</b></a></li>
+
+
+    <li><a href="https://www.tiktok.com/@ludorajuegos" target="_blank" rel="noopener">
+      <div class="icono" style="background:var(--tinta)"><img class="marca-red" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/tiktok.svg" alt=""></div>
+      <span>Míranos en TikTok<small>@ludorajuegos</small></span><b class="flecha">›</b></a></li>
+
+    <li><a href="https://www.youtube.com/@Ludorajuegos" target="_blank" rel="noopener">
+      <div class="icono" style="background:#FF0000"><img class="marca-red" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/youtube.svg" alt=""></div>
+      <span>Míranos en YouTube<small>@Ludorajuegos</small></span><b class="flecha">›</b></a></li>
+
+    <li><a href="https://www.instagram.com/ludorajuegos/" target="_blank" rel="noopener">
+      <div class="icono" style="background:radial-gradient(circle at 30% 107%, #FDF497 0%, #FDF497 5%, #FD5949 45%, #D6249F 60%, #285AEB 90%)"><img class="marca-red" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/instagram.svg" alt=""></div>
+      <span>Síguenos en Instagram<small>@ludorajuegos</small></span><b class="flecha">›</b></a></li>
+
+    <li><a href="https://www.facebook.com/profile.php?id=61595236935607" target="_blank" rel="noopener">
+      <div class="icono" style="background:#1877F2"><img class="marca-red" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/facebook.svg" alt=""></div>
+      <span>Síguenos en Facebook<small>Ludora</small></span><b class="flecha">›</b></a></li>
+  </ul>
+
+  <p class="pie">Ludora · Juegos para toda la familia</p>
+</main>
+</body>
+</html>
