@@ -407,8 +407,8 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
           </h1>
           <p class="lema"><b>Lo viste en mis videos, aquí lo llevas a casa.</b> Juegos de mesa y puzzles para reír, competir y jugar en familia.</p>
           <div class="acciones-portada">
-            <a class="boton" href="#juegos">Ver los juegos</a>
-            <a class="boton secundario" href="#puzzles">Ver los puzzles</a>
+            <a class="boton" href="./#juegos">Ver los juegos</a>
+            <a class="boton secundario" href="./#puzzles">Ver los puzzles</a>
           </div>
         </div>
         <div class="collage" id="collage" aria-label="Algunos de nuestros juegos"></div>
@@ -508,7 +508,7 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
     <div class="contenedor">
       <h2 class="titulo">Preguntas frecuentes</h2>
       <div class="preguntas">
-        <details><summary>¿Qué son los puzzles?</summary><p>¡Son el gimnasio perfecto para tu cerebro! Un puzzle es un desafío físico y mental que te invita a resolver un misterio paso a paso. Ya sea ensamblando piezas o separando un bloque tridimensional, estos juegos son increíbles para desarrollar tu lógica, estimular el pensamiento lateral (aprender a pensar "fuera de la caja") y cultivar tu paciencia. ¡Es la mezcla ideal entre un reto intelectual y mucha diversión para desconectarte de las pantallas!</p><p><a href="#puzzles" style="font-weight:700; color:var(--coral-osc)">Ver los puzzles</a></p></details>
+        <details><summary>¿Qué son los puzzles?</summary><p>¡Son el gimnasio perfecto para tu cerebro! Un puzzle es un desafío físico y mental que te invita a resolver un misterio paso a paso. Ya sea ensamblando piezas o separando un bloque tridimensional, estos juegos son increíbles para desarrollar tu lógica, estimular el pensamiento lateral (aprender a pensar "fuera de la caja") y cultivar tu paciencia. ¡Es la mezcla ideal entre un reto intelectual y mucha diversión para desconectarte de las pantallas!</p><p><a href="./#puzzles" style="font-weight:700; color:var(--coral-osc)">Ver los puzzles</a></p></details>
         <details><summary>¿Qué medios de pago aceptan?</summary>
           <p>¡Queremos que llevarte tu próximo puzzle o juego de mesa a casa sea súper fácil! Al pagar puedes elegir Nequi, Botón Bancolombia, tarjeta de crédito o débito, o PSE, todo directamente en la ventana de pago. ¡Tú eliges la opción que mejor te funcione! Además, puedes tener la tranquilidad de que todos tus pagos están protegidos y respaldados por Wompi, la pasarela de pagos de Bancolombia.</p>
           <div class="medios" aria-label="Medios de pago"><span>Nequi</span><span>Bancolombia</span><span>Tarjeta crédito</span><span>Tarjeta débito</span><span>PSE</span></div>
@@ -992,7 +992,7 @@ document.addEventListener("click", e => {
   const id = url.searchParams.get("juego");
   if (id && buscarJ(id)) { e.preventDefault(); cerrarSugerencias?.(); abrirJuego(id); return; }
   if (a.classList.contains("volver")) { e.preventDefault(); volverCatalogo(""); return; }
-  if (!url.search && url.hash && !$("vista-detalle").classList.contains("oculto")) { e.preventDefault(); volverCatalogo(url.hash.slice(1)); }
+  if (url.hash && !id && !$("vista-detalle").classList.contains("oculto")) { e.preventDefault(); volverCatalogo(url.hash.slice(1)); }
 }, true);
 window.addEventListener("popstate", () => { const enDetalle = new URLSearchParams(location.search).get("juego"); mostrar(); if (!enDetalle) { document.documentElement.style.scrollBehavior = "auto"; window.scrollTo(0, posCatalogo); document.documentElement.style.scrollBehavior = ""; } });
 
