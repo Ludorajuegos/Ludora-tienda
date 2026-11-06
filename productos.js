@@ -1,18 +1,9 @@
 /* =====================================================================
-   LUDORA · LISTA DE PRODUCTOS
-   Este es el ÚNICO archivo que necesitas editar para agregar, quitar
-   o cambiar juegos, precios, fotos e inventario.
-   ---------------------------------------------------------------------
-   id:             nombre corto, sin espacios, tildes ni ñ (ej. "uno-spin")
-   nombre:         nombre que se muestra en grande
-   nombreOriginal: nombre de la caja / en inglés ("" si no tiene)
-   precio:         número sin puntos ni signo $ (ej. 50000).
-                   Con 0 el producto NO aparece en la página.
-   grupo:          uno de los grupos de abajo
-   jugadores:      texto, ej. "2 a 4" o "2 o más"
-   fotos:          ["img/uno-spin.jpg", "img/uno-spin-2.jpg"] (la primera es la principal)
-   inventario:     unidades disponibles. Con 0 aparece como "Agotado".
-                   OJO: no baja sola cuando vendes; actualízala tú.
+   LUDORA · RESPALDO DE PRODUCTOS
+   Los productos ahora se manejan en la hoja de Google "pagina web Ludora".
+   Esta lista SOLO se usa si la hoja no responde, así que no hace falta
+   mantenerla al día.
+   Lo que sí se edita aquí: el valor del ENVÍO y los colores de las categorías.
    ===================================================================== */
 
 // Valor del envío por pedido según la zona que elige el cliente en el carrito.

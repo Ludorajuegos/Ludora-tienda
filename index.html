@@ -330,6 +330,18 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
 .campo.con-error input, .campo.con-error select{border-color:#D93A26}
 .campo .ayuda{color:var(--tinta-2); font-size:13px}
 .campo .error-campo{color:#B42318; font-size:13px; font-weight:600}
+.campo textarea{min-height:120px; padding:10px 14px; border-radius:12px; border:2px solid var(--linea); background:#fff; font:inherit; font-size:16px; width:100%; resize:vertical}
+.campo textarea:focus{outline:none; border-color:var(--turquesa)}
+.campo.con-error textarea{border-color:#D93A26}
+.form-pqr{max-width:600px; background:#fff; border-radius:18px; padding:20px; margin:0 0 22px; border:2px solid var(--linea); position:relative}
+.form-pqr h3{margin:0 0 14px; font-size:18px}
+.form-pqr .dos{display:grid; gap:0 12px}
+@media (min-width:560px){ .form-pqr .dos{grid-template-columns:1fr 1fr} }
+.trampa{position:absolute; left:-9999px; width:1px; height:1px; opacity:0}
+.pqr-ok{background:#E3F7F3; color:#0B5E52; border-radius:14px; padding:16px 18px; margin:0 0 22px; max-width:600px; font-size:16px}
+.precio s.antes{display:block; font-size:.6em; font-weight:500; color:var(--tinta-2)}
+.desc-sello{position:absolute; top:10px; right:10px; background:var(--coral); color:#fff; font-size:12px; font-weight:800; padding:4px 10px; border-radius:999px}
+.info .desc-sello{position:static; display:inline-block; margin-left:10px; vertical-align:middle; font-size:14px}
 .volver-carrito{border:0; background:none; padding:8px 0; font-weight:600; color:var(--tinta-2); cursor:pointer}
 .nota{font-size:13px; color:var(--tinta-2); text-align:center; margin:10px 0 0}
 .error{background:#FDE7E4; color:#8A1F12; border-radius:12px; padding:10px 14px; font-size:15px; margin:0 0 12px}
@@ -519,7 +531,23 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
           <p>No tienes que calcular nada: cuando escribes tu dirección en el carrito, el valor del envío se suma automáticamente al total antes de pagar.</p>
         </details>
         <details><summary>¿Cuánto tarda en llegar?</summary><p>Todos nuestros despachos tardan entre 3 y 4 días hábiles en llegar a tu destino. Ten en cuenta que los días hábiles no incluyen fines de semana ni festivos. Tan pronto entreguemos tu pedido a la transportadora, te enviaremos un mensaje con el enlace de rastreo para que sepas exactamente cuándo llega tu diversión.</p></details>
-        <details><summary>¿Qué pasa si el juego llega dañado o incompleto?</summary><p>¡Queremos que tu experiencia de juego sea perfecta! Si por alguna razón tu pedido llega dañado o incompleto, avísanos de inmediato y te cambiamos el juego por uno nuevo, sin costo, para que la diversión no se detenga. Solo escríbenos por mensaje directo a nuestro Instagram <a href="https://www.instagram.com/ludorajuegos/" target="_blank" rel="noopener" style="font-weight:700; color:var(--coral-osc)">@ludorajuegos</a> con fotos del inconveniente y nosotros nos encargamos del resto.</p></details>
+        <details id="pqr"><summary>¿Qué pasa si el juego llega dañado o incompleto?</summary>
+          <p>¡Queremos que tu experiencia de juego sea perfecta! Si por alguna razón tu pedido llega dañado o incompleto, avísanos de inmediato y te cambiamos el juego por uno nuevo, sin costo, para que la diversión no se detenga. Solo llena este formulario y nosotros nos encargamos del resto.</p>
+          <form class="form-pqr" id="form-pqr" novalidate>
+            <h3>Cuéntanos qué pasó</h3>
+            <div class="campo"><label for="p-nombre">Nombre completo</label><input id="p-nombre" name="nombre" autocomplete="name" maxlength="100" required></div>
+            <div class="dos">
+              <div class="campo"><label for="p-celular">Celular</label><input id="p-celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" required></div>
+              <div class="campo"><label for="p-correo">Correo</label><input id="p-correo" name="correo" type="email" autocomplete="email" maxlength="120" required></div>
+            </div>
+            <div class="campo"><label for="p-guia">Número de guía</label><input id="p-guia" name="guia" maxlength="40" autocomplete="off" required aria-describedby="a-guia"><small class="ayuda" id="a-guia">Lo encuentras en el mensaje que te enviamos con el enlace de rastreo.</small></div>
+            <div class="campo"><label for="p-mensaje">Cuéntanos</label><textarea id="p-mensaje" name="mensaje" maxlength="2000" required placeholder="¿Qué juego fue y qué le pasó? Ej: la caja llegó rota y faltan dos fichas."></textarea></div>
+            <input class="trampa" name="sitio" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <p class="error oculto" id="pqr-error" role="alert"></p>
+            <button type="submit" class="boton" id="pqr-enviar">Enviar solicitud</button>
+          </form>
+          <div class="pqr-ok oculto" id="pqr-ok" role="status" tabindex="-1"></div>
+        </details>
         <details><summary>¿Puedo retractarme de la compra?</summary><p>¡Claro que sí! Si cambiaste de opinión, la ley colombiana te protege. Tienes 5 días hábiles desde que recibes tu paquete para ejercer tu derecho de retracto y pedir el reintegro de tu dinero. Solo te pedimos un favor gigante: el juego debe volver a nuestras manos intacto, con su sellado original y sin abrir, tal cual como te llegó. Recuerda que el costo del envío de regreso corre por tu cuenta.</p></details>
       </div>
     </div>
@@ -568,11 +596,15 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
 </dialog>
 
 <script src="productos.js"></script>
+<script src="/api/productos.js"></script>
 <script src="https://checkout.wompi.co/widget.js"></script>
 <script>
-/* No necesitas editar este archivo para agregar juegos: hazlo en productos.js */
+/* No necesitas editar este archivo para agregar juegos: hazlo en la hoja de Google "pagina web Ludora" */
 const PORTADA = ["tiburon", "oruga", "inodoro-loco", "boom-balloon"]; // juegos que salen en la portada
-const DESTACADOS = PORTADA.concat(["uno-attack", "buster", "blast-cup", "pizza"]); // salen primero en "Destacados"
+const DESTACADOS_BASE = PORTADA.concat(["uno-attack", "buster", "blast-cup", "pizza"]); // salen primero en "Destacados"
+// Si la hoja tiene la columna "Destacado", mandan esos (respetando el orden de siempre)
+const MARCADOS = JUEGOS.filter(j => j.destacado).map(j => j.id);
+const DESTACADOS = MARCADOS.length ? [...DESTACADOS_BASE.filter(id => MARCADOS.includes(id)), ...MARCADOS.filter(id => !DESTACADOS_BASE.includes(id))] : DESTACADOS_BASE;
 
 const $ = id => document.getElementById(id);
 const INICIO = location.pathname; // funciona igual abierta en el computador o publicada
@@ -593,6 +625,9 @@ function foto(j, i = 0, carga = "lazy") {
   return src ? `<img src="${esc(src)}" alt="${esc(j.nombre)}" loading="${carga}" decoding="async">`
              : `<span class="sin-foto" style="--c:${color(j)}" aria-hidden="true">${esc(j.nombre.replace(/[¿?]/g, "").charAt(0))}</span>`;
 }
+const conDescuento = j => j.precioAntes > j.precio;
+const descuento = j => `-${Math.round(100 - j.precio * 100 / j.precioAntes)}%`;
+const precioHTML = j => (conDescuento(j) ? `<s class="antes">${pesos(j.precioAntes)}</s>` : "") + pesos(j.precio);
 const chip = j => `<span class="chip" style="--c:${color(j)}"><i></i>${esc(nombreGrupo(j))}</span>`;
 
 /* ---------- Carrito ---------- */
@@ -784,7 +819,7 @@ async function pagar() {
   const b = $("pagar"); b.disabled = true; b.textContent = "Preparando el pago…";
   try {
     const items = Object.entries(carrito).map(([id, cantidad]) => ({ id, cantidad }));
-    const r = await fetch("/.netlify/functions/firmar", { method: "POST", headers: { "Content-Type": "application/json" },
+    const r = await fetch("/api/firmar", { method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items, envio: { departamento: d.departamento, ciudad: d.ciudad } }) });
     const res = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(res.error || "No pudimos preparar el pago. Intenta de nuevo en un momento.");
@@ -812,13 +847,13 @@ let filtro = "todos", texto = "", orden = "destacados";
 function tarjeta(j) {
   return `<article class="tarjeta">
     <a class="foto" href="${enlace(j.id)}" aria-label="Ver ${esc(j.nombre)}">
-      ${foto(j)}${chip(j)}${disponible(j) ? "" : `<span class="agotado-sello">Agotado</span>`}
+      ${foto(j)}${chip(j)}${conDescuento(j) ? `<span class="desc-sello">${descuento(j)}</span>` : ""}${disponible(j) ? "" : `<span class="agotado-sello">Agotado</span>`}
     </a>
     <div class="cuerpo">
       <h3><a href="${enlace(j.id)}">${esc(j.nombre)}</a></h3>
       ${j.nombreOriginal ? `<span class="original">${esc(j.nombreOriginal)}</span>` : ""}
       ${j.jugadores ? `<span class="datos"><svg aria-hidden="true"><use href="#i-gente"/></svg>${esc(jugadoresTexto(j))}</span>` : ""}
-      <div class="pie-tarjeta"><span class="precio">${pesos(j.precio)}</span>${botonAgregar(j)}</div>
+      <div class="pie-tarjeta"><span class="precio">${precioHTML(j)}</span>${botonAgregar(j)}</div>
     </div>
   </article>`;
 }
@@ -902,7 +937,7 @@ function pintarDetalle(j) {
       ${chip(j)}
       <h1>${esc(j.nombre)}</h1>
       ${j.nombreOriginal ? `<span class="original">${esc(j.nombreOriginal)}</span>` : ""}
-      <span class="precio">${pesos(j.precio)}</span>
+      <span class="precio">${precioHTML(j)}${conDescuento(j) ? `<span class="desc-sello">${descuento(j)}</span>` : ""}</span>
       <ul class="fichas">
         <li><small>Jugadores</small><b>${esc(j.jugadores || "—")}</b></li>
         <li><small>Disponibilidad</small><b>${disponible(j) ? "Disponible" : "Agotado"}</b></li>
@@ -1090,6 +1125,53 @@ pintarCollageQuienes();
 pintarFiltros();
 guardar();
 mostrar();
+</script>
+<script>
+/* ---------- Formulario PQR (juego dañado o incompleto) ---------- */
+(() => {
+  const el = id => document.getElementById(id);
+  const form = el("form-pqr");
+  const abrirPQR = () => { el("pqr").open = true; };
+  if (location.hash === "#pqr") abrirPQR();
+  document.addEventListener("click", e => { const a = e.target.closest('a[href$="#pqr"]'); if (a) abrirPQR(); }, true);
+  const marcar = (campo, msg) => {
+    const input = form.elements[campo], c = input.closest(".campo");
+    c.classList.toggle("con-error", !!msg);
+    c.querySelector(".error-campo")?.remove();
+    if (msg) { input.setAttribute("aria-invalid", "true"); c.insertAdjacentHTML("beforeend", `<small class="error-campo">${msg}</small>`); }
+    else input.removeAttribute("aria-invalid");
+  };
+  form.addEventListener("input", e => { if (e.target.name && e.target.closest(".con-error")) marcar(e.target.name, ""); });
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(form));
+    for (const k in d) d[k] = String(d[k]).trim();
+    d.celular = d.celular.replace(/\s/g, "");
+    const err = {
+      nombre: d.nombre.split(/\s+/).length < 2 ? "Escribe tu nombre y apellido." : "",
+      celular: /^3\d{9}$/.test(d.celular) ? "" : "Escribe un celular de 10 dígitos que empiece por 3.",
+      correo: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.correo) ? "" : "Escribe un correo válido, por ejemplo nombre@gmail.com.",
+      guia: d.guia.length >= 4 ? "" : "Escribe el número de guía de tu envío.",
+      mensaje: d.mensaje.length >= 10 ? "" : "Cuéntanos un poco más qué pasó con tu pedido."
+    };
+    Object.entries(err).forEach(([k, m]) => marcar(k, m));
+    const primero = Object.keys(err).find(k => err[k]);
+    el("pqr-error").classList.add("oculto");
+    if (primero) { form.elements[primero].focus(); return; }
+    const b = el("pqr-enviar"); b.disabled = true; b.textContent = "Enviando…";
+    try {
+      const r = await fetch("/api/pqr", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) });
+      const res = await r.json().catch(() => ({}));
+      if (!r.ok || !res.ok) throw new Error(res.error || "No pudimos enviar tu solicitud. Intenta de nuevo en unos minutos.");
+      form.classList.add("oculto");
+      el("pqr-ok").innerHTML = `<b>¡Recibimos tu solicitud!</b><br>Tu número de radicado es <b>${res.radicado}</b>. Te contactaremos a tu celular o correo para cambiar tu juego lo antes posible.`;
+      el("pqr-ok").classList.remove("oculto"); el("pqr-ok").focus();
+    } catch (x) {
+      el("pqr-error").textContent = x.message === "Failed to fetch" || x.name === "TypeError" ? "El formulario se activa cuando la página esté publicada en internet." : x.message;
+      el("pqr-error").classList.remove("oculto");
+    } finally { b.disabled = false; b.textContent = "Enviar solicitud"; }
+  });
+})();
 </script>
 </body>
 </html>
