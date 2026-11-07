@@ -158,8 +158,13 @@ async function sha256(texto) {
 }
 
 async function firmar(request, env) {
-  const llavePublica = env.WOMPI_PUBLIC_KEY, secreto = env.WOMPI_INTEGRITY_KEY;
+  // .trim() quita espacios o saltos de línea que se cuelan al copiar y pegar las llaves
+  const llavePublica = String(env.WOMPI_PUBLIC_KEY || "").trim(), secreto = String(env.WOMPI_INTEGRITY_KEY || "").trim();
   if (!llavePublica || !secreto) return json(500, { error: "Los pagos aún no están configurados en la tienda." });
+  // Las dos llaves deben ser del mismo ambiente: pub_test_ con test_integrity_, o pub_prod_ con prod_integrity_
+  const ambiente = llavePublica.startsWith("pub_test_") ? "test" : llavePublica.startsWith("pub_prod_") ? "prod" : "?";
+  if (ambiente === "?" || !secreto.startsWith(`${ambiente}_integrity_`))
+    return json(500, { error: "Las llaves de pago no coinciden. Revisa en Cloudflare que WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_KEY sean del mismo modo de Wompi (pruebas o producción)." });
 
   let items, destino;
   try { ({ items, envio: destino } = await request.json()); } catch { items = null; }
