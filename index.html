@@ -1012,12 +1012,28 @@ function abrirJuego(id) {
   pintarDetalle(buscarJ(id)); arriba();
 }
 function volverCatalogo(destino) {
-  try { history.pushState({}, "", INICIO + (destino ? "#" + destino : "")); } catch {}
-  $("vista-detalle").classList.add("oculto"); $("vista-catalogo").classList.remove("oculto");
+  if (destino) return irA(destino);
+  try { history.pushState({}, "", INICIO); } catch {}
+  $("vista-detalle").classList.add("oculto"); $("vista-gracias").classList.add("oculto"); $("vista-catalogo").classList.remove("oculto");
   document.title = "Ludora · Juegos para toda la familia"; pintarCatalogo();
   document.documentElement.style.scrollBehavior = "auto";
-  if (destino) $(destino)?.scrollIntoView(); else window.scrollTo(0, posCatalogo);
+  window.scrollTo(0, posCatalogo);
   document.documentElement.style.scrollBehavior = "";
+}
+/* Ir a una sección (Juegos, Puzzles, Preguntas…) sin recargar la página, desde cualquier vista.
+   Los saltos largos se hacen directo (sin animación) para que no se queden a mitad de camino. */
+function irA(destino) {
+  const el = $(destino); if (!el) return;
+  const enCatalogo = $("vista-detalle").classList.contains("oculto") && $("vista-gracias").classList.contains("oculto");
+  if (!enCatalogo) {
+    $("vista-detalle").classList.add("oculto"); $("vista-gracias").classList.add("oculto"); $("vista-catalogo").classList.remove("oculto");
+    document.title = "Ludora · Juegos para toda la familia"; pintarCatalogo();
+  }
+  try { history.pushState({}, "", INICIO + "#" + destino); } catch {}
+  const directo = !enCatalogo || Math.abs(el.getBoundingClientRect().top) > 1500;
+  el.scrollIntoView({ behavior: directo ? "instant" : "smooth" });
+  const corregir = () => { const t = el.getBoundingClientRect().top; if (t < 0 || t > 200) el.scrollIntoView({ behavior: "instant" }); };
+  if (directo) { setTimeout(corregir, 300); setTimeout(corregir, 1000); }
 }
 document.addEventListener("click", e => {
   const a = e.target.closest("a[href]");
@@ -1027,7 +1043,7 @@ document.addEventListener("click", e => {
   const id = url.searchParams.get("juego");
   if (id && buscarJ(id)) { e.preventDefault(); cerrarSugerencias?.(); abrirJuego(id); return; }
   if (a.classList.contains("volver")) { e.preventDefault(); volverCatalogo(""); return; }
-  if (url.hash && !id && !$("vista-detalle").classList.contains("oculto")) { e.preventDefault(); volverCatalogo(url.hash.slice(1)); }
+  if (url.hash && !id && $(url.hash.slice(1))) { e.preventDefault(); cerrarSugerencias?.(); irA(url.hash.slice(1)); }
 }, true);
 window.addEventListener("popstate", () => { const enDetalle = new URLSearchParams(location.search).get("juego"); mostrar(); if (!enDetalle) { document.documentElement.style.scrollBehavior = "auto"; window.scrollTo(0, posCatalogo); document.documentElement.style.scrollBehavior = ""; } });
 
@@ -1125,6 +1141,9 @@ pintarCollageQuienes();
 pintarFiltros();
 guardar();
 mostrar();
+// Si la página abre con #puzzles, #juegos…: volver a ubicarla cuando terminen de cargar letras e imágenes
+if (location.hash && $(location.hash.slice(1)) && !$("vista-catalogo").classList.contains("oculto"))
+  addEventListener("load", () => $(location.hash.slice(1)).scrollIntoView({ behavior: "instant" }));
 </script>
 <script>
 /* ---------- Formulario PQR (juego dañado o incompleto) ---------- */
