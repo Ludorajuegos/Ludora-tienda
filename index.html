@@ -348,6 +348,10 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
 .volver-carrito{border:0; background:none; padding:8px 0; font-weight:600; color:var(--tinta-2); cursor:pointer}
 .nota{font-size:13px; color:var(--tinta-2); text-align:center; margin:10px 0 0}
 .error{background:#FDE7E4; color:#8A1F12; border-radius:12px; padding:10px 14px; font-size:15px; margin:0 0 12px}
+/* Ventana de Wompi en celular: se queda fija en pantalla y se desliza por dentro (no arrastra la página de fondo) */
+html.pagando, html.pagando body{overflow:hidden; overscroll-behavior:none}
+html.pagando .waybox-modal{position:fixed !important; top:5px !important; max-height:calc(100dvh - 10px) !important;
+  overflow-y:auto !important; -webkit-overflow-scrolling:touch; overscroll-behavior:contain}
 .aviso-pago{background:#FFF3D6; color:#6B4A00; border-radius:12px; padding:10px 14px; font-size:15px; margin:0 0 12px}
 .carrito .vacio-c{text-align:center; padding:48px 8px; color:var(--tinta-2)}
 
@@ -814,18 +818,25 @@ function validar() {
 }
 function abrirCarrito() { errorPago = ""; avisoPago = ""; paso = "carrito"; pintarCarrito(); $("carrito").showModal(); }
 
+/* Mientras la ventana de Wompi está abierta, la página de atrás queda quieta:
+   así al deslizar el dedo se mueve la ventana de pago y no los juegos de fondo. */
+function congelarFondo() { document.documentElement.classList.add("pagando"); }
+function soltarFondo() { document.documentElement.classList.remove("pagando"); }
 /* Detecta cuando se cierra la ventana de Wompi (su iframe desaparece o se oculta) */
 function vigilarCierre(alCerrar) {
   const antes = new Set([...document.querySelectorAll("iframe")].filter(f => f.getClientRects().length)); // los que ya se veían
   let marco = null, intentos = 0;
   const t = setInterval(() => {
+    // Wompi cambia el alto de su ventana según el paso; el marco interno toma ese alto para que todo se pueda deslizar
+    const caja = document.querySelector(".waybox-modal"), h = caja && parseFloat(caja.style.height);
+    if (h) { const f = caja.querySelector("iframe"); if (f && f.style.minHeight !== h + "px") f.style.minHeight = h + "px"; }
     if (!marco) {
       marco = [...document.querySelectorAll("iframe")].find(f => !antes.has(f) && f.getClientRects().length);
-      if (!marco && ++intentos > 75) clearInterval(t); // 30 s sin abrir: se deja de vigilar
+      if (!marco && ++intentos > 120) { clearInterval(t); soltarFondo(); } // 30 s sin abrir: se deja de vigilar
       return;
     }
     if (!marco.isConnected || !marco.getClientRects().length) { clearInterval(t); setTimeout(alCerrar, 800); } // espera por si Wompi aún avisa el resultado
-  }, 400);
+  }, 250);
 }
 async function pagar() {
   const { d, e } = validar();
@@ -856,6 +867,7 @@ async function pagar() {
     });
     let listo = false;
     const volverAlPago = msg => {
+      soltarFondo();
       if (listo) return; listo = true;
       paso = "datos"; errorPago = ""; avisoPago = msg; pintarCarrito();
       if (!$("carrito").open) $("carrito").showModal();
@@ -863,9 +875,10 @@ async function pagar() {
     // Botón "atrás": si cierran la ventana de Wompi sin pagar (por ejemplo, eligieron PSE y querían Nequi),
     // vuelven a este paso con sus datos y pueden elegir otro medio.
     vigilarCierre(() => volverAlPago("¿Quieres pagar con otro medio? Toca «Ir a pagar» y elige el que prefieras: Nequi, Bancolombia, tarjeta o PSE."));
+    congelarFondo();
     widget.open(rr => {
       const t = rr && rr.transaction;
-      if (t && (t.status === "APPROVED" || t.status === "PENDING")) { listo = true; if ($("carrito").open) $("carrito").close(); carrito = {}; guardar(); mostrarGracias(); }
+      if (t && (t.status === "APPROVED" || t.status === "PENDING")) { listo = true; soltarFondo(); if ($("carrito").open) $("carrito").close(); carrito = {}; guardar(); mostrarGracias(); }
       else if (t) volverAlPago("El pago no se completó. Puedes intentarlo de nuevo o elegir otro medio de pago.");
     });
   } catch (err) {
