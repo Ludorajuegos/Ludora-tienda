@@ -367,8 +367,22 @@ html.pagando .waybox-modal{position:fixed !important; top:5px !important; max-he
 
 @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important; scroll-behavior:auto !important} }
 </style>
+<!-- Píxel de Meta · Ludora -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1671668624589554');
+fbq('track', 'PageView');
+</script>
 </head>
 <body>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1671668624589554&ev=PageView&noscript=1"></noscript>
+
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-bolsa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></symbol>
@@ -664,12 +678,41 @@ function pintarContador() {
   document.body.classList.toggle("con-barra", n > 0);
   $("barra-texto").textContent = `${n} ${n === 1 ? "producto" : "productos"} · ${pesos(subtotal())}`;
 }
+/* ---------- Píxel de Meta: eventos ---------- */
+function evento(nombre, datos, opciones) { try { if (typeof fbq === "function") fbq("track", nombre, datos, opciones); } catch {} }
+const contenidoCarrito = c => Object.entries(c).map(([id, n]) => ({ id, quantity: n, item_price: buscarJ(id)?.precio }));
+// Las referencias de pago traen los juegos: LUD-xxxx-tiburonx1_uno-attackx2-BOG
+function contenidoDeReferencia(ref) {
+  return String(ref || "").replace(/^LUD-[^-]+-/, "").replace(/-(BOG|NAL)$/, "").split("_")
+    .map(p => p.match(/^(.+)x(\d+)$/)).filter(Boolean).map(m => ({ id: m[1], quantity: Number(m[2]) }));
+}
+// Registra la compra solo una vez por transacción (aunque recarguen la página de gracias)
+function registrarCompra(tx, valor, contenido) {
+  if (!tx) return;
+  try { if (localStorage.getItem("ludora-compra-" + tx)) return; localStorage.setItem("ludora-compra-" + tx, "1"); } catch {}
+  evento("Purchase", { value: valor, currency: "COP", content_type: "product", contents: contenido,
+    content_ids: contenido.map(c => c.id), num_items: contenido.reduce((a, c) => a + (c.quantity || 1), 0) }, { eventID: "compra-" + tx });
+}
+// Pregunta a Wompi (a través de la tienda) cómo quedó un pago
+async function consultarPago(id) {
+  const r = await fetch("/api/transaccion?id=" + encodeURIComponent(id));
+  if (!r.ok) throw new Error("sin respuesta");
+  return r.json();
+}
+// Si el pago quedó pendiente (por ejemplo PSE), revisa varias veces hasta que se apruebe
+async function esperarAprobacion(id) {
+  for (let i = 0; i < 24; i++) {
+    try { const t = await consultarPago(id); if (t.estado === "APPROVED") { registrarCompra(t.id, t.valor, contenidoDeReferencia(t.referencia)); return; } if (t.estado !== "PENDING") return; } catch {}
+    await new Promise(r => setTimeout(r, 5000));
+  }
+}
 function agregar(id) {
   const j = buscarJ(id);
   if (!j || !disponible(j)) return;
   if ((carrito[id] || 0) >= maximo(j)) { aviso("No hay más unidades disponibles"); return; }
   carrito[id] = (carrito[id] || 0) + 1;
   guardar();
+  evento("AddToCart", { content_ids: [j.id], content_name: j.nombre, content_type: "product", value: j.precio, currency: "COP" });
   const c = $("cuenta"); c.classList.remove("salta"); void c.offsetWidth; c.classList.add("salta");
   aviso(`${j.nombre} agregado al carrito`);
 }
@@ -848,6 +891,9 @@ async function pagar() {
     return;
   }
   errorPago = ""; avisoPago = "";
+  evento("InitiateCheckout", { value: subtotal() + (valorEnvio() || 0), currency: "COP", content_type: "product",
+    content_ids: Object.keys(carrito), num_items: Object.values(carrito).reduce((a, n) => a + n, 0) });
+  const comprado = contenidoCarrito(carrito); // se guarda antes de vaciar el carrito
   const b = $("pagar"); b.disabled = true; b.textContent = "Preparando el pago…";
   try {
     const items = Object.entries(carrito).map(([id, cantidad]) => ({ id, cantidad }));
@@ -878,6 +924,8 @@ async function pagar() {
     congelarFondo();
     widget.open(rr => {
       const t = rr && rr.transaction;
+      if (t && t.status === "APPROVED") registrarCompra(t.id || res.referencia, res.montoEnCentavos / 100, comprado);
+      if (t && t.status === "PENDING" && t.id) esperarAprobacion(t.id);
       if (t && (t.status === "APPROVED" || t.status === "PENDING")) { listo = true; soltarFondo(); if ($("carrito").open) $("carrito").close(); carrito = {}; guardar(); mostrarGracias(); }
       else if (t) volverAlPago("El pago no se completó. Puedes intentarlo de nuevo o elegir otro medio de pago.");
     });
@@ -971,6 +1019,7 @@ function pintarCollage() {
 /* ---------- Detalle ---------- */
 function pintarDetalle(j) {
   document.title = `${j.nombre} · Ludora`;
+  evento("ViewContent", { content_ids: [j.id], content_name: j.nombre, content_type: "product", value: j.precio, currency: "COP" });
   const fotos = j.fotos || [];
   $("detalle").innerHTML = `
     <div class="galeria">
@@ -1035,9 +1084,25 @@ function mostrarGracias() {
   document.title = "Gracias por tu compra · Ludora";
   scrollTo(0, 0);
 }
+/* Cuando Wompi devuelve al cliente a la tienda (?gracias=1&id=...), se revisa cómo quedó el pago */
+async function volvioDeWompi(tx) {
+  mostrarGracias();
+  if (!tx) { carrito = {}; guardar(); return; }
+  try {
+    const t = await consultarPago(tx);
+    if (t.estado === "APPROVED") { registrarCompra(t.id, t.valor, contenidoDeReferencia(t.referencia)); carrito = {}; guardar(); return; }
+    if (t.estado === "PENDING") { carrito = {}; guardar(); esperarAprobacion(t.id); return; }
+    // Rechazado o con error: se conserva el carrito y se ofrece intentar de nuevo
+    try { history.replaceState({}, "", INICIO); } catch {}
+    $("vista-gracias").classList.add("oculto"); $("vista-catalogo").classList.remove("oculto");
+    document.title = "Ludora · Juegos para toda la familia"; pintarCatalogo();
+    paso = "datos"; errorPago = ""; avisoPago = "Tu pago no se completó. Puedes intentarlo de nuevo o elegir otro medio de pago.";
+    pintarCarrito(); $("carrito").showModal();
+  } catch { carrito = {}; guardar(); }
+}
 function mostrar() {
   const p = new URLSearchParams(location.search);
-  if (p.get("gracias")) { carrito = {}; guardar(); mostrarGracias(); return; }
+  if (p.get("gracias")) { volvioDeWompi(p.get("id")); return; }
   const j = p.get("juego") && buscarJ(p.get("juego"));
   if (!j && p.get("buscar")) { texto = p.get("buscar"); $("buscar").value = texto; $("limpiar").classList.remove("oculto"); }
   $("vista-catalogo").classList.toggle("oculto", !!j);

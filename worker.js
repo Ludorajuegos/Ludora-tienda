@@ -230,11 +230,26 @@ async function pqr(request, env) {
   return json(200, { ok: true, radicado });
 }
 
+// Consulta en Wompi cómo quedó un pago (para la página de gracias y el Píxel de Meta)
+async function transaccion(url, env) {
+  const id = url.searchParams.get("id") || "";
+  if (!/^[\w-]{5,80}$/.test(id)) return json(400, { error: "Transacción no válida." });
+  const base = String(env.WOMPI_PUBLIC_KEY || "").trim().startsWith("pub_test_") ? "https://sandbox.wompi.co/v1" : "https://production.wompi.co/v1";
+  try {
+    const r = await fetch(`${base}/transactions/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) return json(404, { error: "No encontramos el pago." });
+    const t = (await r.json()).data || {};
+    if (!String(t.reference || "").startsWith("LUD-")) return json(404, { error: "No encontramos el pago." });
+    return json(200, { id: t.id, estado: t.status, valor: Math.round((t.amount_in_cents || 0) / 100), referencia: t.reference });
+  } catch { return json(502, { error: "Wompi no respondió." }); }
+}
+
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
+    const url = new URL(request.url), { pathname } = url;
     if (pathname === "/api/productos.js") return productosJS(env);
     if (pathname === "/api/firmar") return request.method === "POST" ? firmar(request, env) : json(405, { error: "Método no permitido." });
+    if (pathname === "/api/transaccion") return transaccion(url, env);
     if (pathname === "/api/pqr") return request.method === "POST" ? pqr(request, env) : json(405, { error: "Método no permitido." });
     return env.ASSETS.fetch(request);
   }
