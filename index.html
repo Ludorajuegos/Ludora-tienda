@@ -6,6 +6,9 @@
 <title>Ludora · Juegos para toda la familia</title>
 <meta name="description" content="Juegos de mesa y puzzles de habilidad mental. Lo viste en mis videos, aquí lo llevas a casa. Pago seguro y envío a toda Colombia.">
 <meta name="theme-color" content="#FFF1E6">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:title" content="Ludora · Juegos para toda la familia">
 <meta property="og:description" content="Juegos de mesa y puzzles con envío a toda Colombia.">
 <meta property="og:image" content="img/tiburon.jpg">
@@ -46,16 +49,16 @@ button,input,select{font:inherit; color:inherit}
 .menu{display:none; gap:22px}
 .menu a{text-decoration:none; font-weight:500; padding:8px 0; white-space:nowrap}
 .menu a:hover{color:var(--coral-osc)}
-@media (min-width:1140px){ .menu{display:flex} }
+@media (min-width:1220px){ .menu{display:flex} }
 .boton-menu{margin-left:auto; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:6px 14px; border-radius:999px;
   border:2px solid var(--linea); background:#fff; font-weight:600; cursor:pointer}
 .boton-menu svg{width:20px; height:20px}
-@media (min-width:1140px){ .boton-menu{display:none} }
+@media (min-width:1220px){ .boton-menu{display:none} }
 .menu-movil{display:none; width:100%; order:5; flex-direction:column; padding:4px 0 8px}
 .menu-movil.abierto{display:flex}
 .menu-movil a{text-decoration:none; font-weight:600; font-size:18px; padding:12px 4px; border-bottom:1px solid var(--linea)}
 .menu-movil a:last-child{border-bottom:0}
-@media (min-width:1140px){ .menu-movil{display:none !important} }
+@media (min-width:1220px){ .menu-movil{display:none !important} }
 .busqueda{position:relative; order:4; flex:1 1 100%}
 @media (min-width:720px){ .busqueda{order:0; flex:1 1 260px; max-width:440px; margin:0 auto} }
 .busqueda svg.lupa{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:20px; height:20px; color:var(--tinta-2); pointer-events:none}
@@ -79,7 +82,7 @@ button,input,select{font:inherit; color:inherit}
 .sugerencias .nada{padding:14px; color:var(--tinta-2); text-align:center}
 .boton-carrito{ display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:6px 8px 6px 16px;
   border-radius:999px; border:0; background:var(--tinta); color:#fff; font-weight:600; cursor:pointer}
-@media (min-width:1140px){ .boton-carrito{margin-left:8px} }
+@media (min-width:1220px){ .boton-carrito{margin-left:8px} }
 .boton-carrito svg{width:20px; height:20px}
 @media (max-width:479px){ .txt-carrito{display:none} .boton-carrito{padding-left:12px} }
 .cuenta{min-width:28px; height:28px; padding:0 8px; border-radius:14px; background:var(--mostaza); color:var(--tinta);
@@ -345,6 +348,7 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
 .volver-carrito{border:0; background:none; padding:8px 0; font-weight:600; color:var(--tinta-2); cursor:pointer}
 .nota{font-size:13px; color:var(--tinta-2); text-align:center; margin:10px 0 0}
 .error{background:#FDE7E4; color:#8A1F12; border-radius:12px; padding:10px 14px; font-size:15px; margin:0 0 12px}
+.aviso-pago{background:#FFF3D6; color:#6B4A00; border-radius:12px; padding:10px 14px; font-size:15px; margin:0 0 12px}
 .carrito .vacio-c{text-align:center; padding:48px 8px; color:var(--tinta-2)}
 
 .toast{position:fixed; left:50%; width:max-content; max-width:calc(100% - 32px); top:calc(76px + env(safe-area-inset-top,0px)); transform:translateX(-50%); z-index:30;
@@ -392,6 +396,7 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
       <a href="./#como-comprar">Cómo comprar</a>
       <a href="./#quienes-somos">Quiénes somos</a>
       <a href="./#preguntas">Preguntas</a>
+      <a href="./#pqr">PQR</a>
     </nav>
     <button type="button" class="boton-menu" id="boton-menu" aria-expanded="false" aria-controls="menu-movil">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menú
@@ -405,6 +410,7 @@ dialog.carrito[open]{display:flex; flex-direction:column; animation:entra .25s e
       <a href="./#como-comprar">Cómo comprar</a>
       <a href="./#quienes-somos">Quiénes somos</a>
       <a href="./#preguntas">Preguntas</a>
+      <a href="./#pqr">PQR</a>
     </nav>
   </div>
 </header>
@@ -669,6 +675,7 @@ function botonAgregar(j, ancho = false) {
 }
 
 let errorPago = "";
+let avisoPago = ""; // mensaje amable cuando cierran la ventana de Wompi sin pagar
 let paso = "carrito"; // "carrito" o "datos"
 const DEPARTAMENTOS = ["Bogotá D.C.", "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá", "Caldas", "Caquetá", "Casanare",
   "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño",
@@ -764,6 +771,7 @@ function pintarDatos() {
   </li>`;
   $("resumen-carrito").innerHTML = `
     ${errorPago ? `<p class="error" role="alert">${esc(errorPago)}</p>` : ""}
+    ${!errorPago && avisoPago ? `<p class="aviso-pago" role="status">${esc(avisoPago)}</p>` : ""}
     <div class="linea-res"><span>Subtotal</span><span>${pesos(subtotal())}</span></div>
     <div class="linea-res"><span>Envío${zonaDe(datos) ? ` (${ENVIOS[zonaDe(datos)].nombre})` : ""}</span><span>${envio == null ? "Elige tu departamento" : pesos(envio)}</span></div>
     <div class="linea-res total"><span>Total</span><span>${pesos(subtotal() + (envio || 0))}</span></div>
@@ -804,8 +812,21 @@ function validar() {
   d.cedula = d.cedula.replace(/[.\s]/g, ""); d.celular = d.celular.replace(/\s/g, "");
   return { d, e };
 }
-function abrirCarrito() { errorPago = ""; paso = "carrito"; pintarCarrito(); $("carrito").showModal(); }
+function abrirCarrito() { errorPago = ""; avisoPago = ""; paso = "carrito"; pintarCarrito(); $("carrito").showModal(); }
 
+/* Detecta cuando se cierra la ventana de Wompi (su iframe desaparece o se oculta) */
+function vigilarCierre(alCerrar) {
+  const antes = new Set([...document.querySelectorAll("iframe")].filter(f => f.getClientRects().length)); // los que ya se veían
+  let marco = null, intentos = 0;
+  const t = setInterval(() => {
+    if (!marco) {
+      marco = [...document.querySelectorAll("iframe")].find(f => !antes.has(f) && f.getClientRects().length);
+      if (!marco && ++intentos > 75) clearInterval(t); // 30 s sin abrir: se deja de vigilar
+      return;
+    }
+    if (!marco.isConnected || !marco.getClientRects().length) { clearInterval(t); setTimeout(alCerrar, 800); } // espera por si Wompi aún avisa el resultado
+  }, 400);
+}
 async function pagar() {
   const { d, e } = validar();
   erroresCampo = e;
@@ -815,7 +836,7 @@ async function pagar() {
     const primero = document.querySelector('[aria-invalid="true"]'); primero?.focus();
     return;
   }
-  errorPago = "";
+  errorPago = ""; avisoPago = "";
   const b = $("pagar"); b.disabled = true; b.textContent = "Preparando el pago…";
   try {
     const items = Object.entries(carrito).map(([id, cantidad]) => ({ id, cantidad }));
@@ -827,14 +848,25 @@ async function pagar() {
     // Todo lo de la entrega va en la línea de dirección para que lo veas completo en tu panel de Wompi.
     const linea = [d.direccion, `Barrio ${d.barrio}`, d.localidad && `Localidad ${d.localidad}`, d.especificaciones].filter(Boolean).join(" | ");
     $("carrito").close();
-    new WidgetCheckout({
+    const widget = new WidgetCheckout({
       currency: "COP", amountInCents: res.montoEnCentavos, reference: res.referencia, publicKey: res.llavePublica,
       signature: { integrity: res.firma }, redirectUrl: location.origin + location.pathname + "?gracias=1",
       customerData: { email: d.correo, fullName: d.nombre, phoneNumber: d.celular, phoneNumberPrefix: "+57", legalId: d.cedula, legalIdType: "CC" },
       shippingAddress: { addressLine1: linea, city: d.ciudad, region: d.departamento, country: "CO", phoneNumber: d.celular, name: d.nombre }
-    }).open(rr => {
+    });
+    let listo = false;
+    const volverAlPago = msg => {
+      if (listo) return; listo = true;
+      paso = "datos"; errorPago = ""; avisoPago = msg; pintarCarrito();
+      if (!$("carrito").open) $("carrito").showModal();
+    };
+    // Botón "atrás": si cierran la ventana de Wompi sin pagar (por ejemplo, eligieron PSE y querían Nequi),
+    // vuelven a este paso con sus datos y pueden elegir otro medio.
+    vigilarCierre(() => volverAlPago("¿Quieres pagar con otro medio? Toca «Ir a pagar» y elige el que prefieras: Nequi, Bancolombia, tarjeta o PSE."));
+    widget.open(rr => {
       const t = rr && rr.transaction;
-      if (t && (t.status === "APPROVED" || t.status === "PENDING")) { carrito = {}; guardar(); mostrarGracias(); }
+      if (t && (t.status === "APPROVED" || t.status === "PENDING")) { listo = true; if ($("carrito").open) $("carrito").close(); carrito = {}; guardar(); mostrarGracias(); }
+      else if (t) volverAlPago("El pago no se completó. Puedes intentarlo de nuevo o elegir otro medio de pago.");
     });
   } catch (err) {
     errorPago = err.message === "Failed to fetch" ? "El pago se activa cuando la página esté publicada en internet." : err.message;
