@@ -898,7 +898,7 @@ async function pagar() {
   try {
     const items = Object.entries(carrito).map(([id, cantidad]) => ({ id, cantidad }));
     const r = await fetch("/api/firmar", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, envio: { departamento: d.departamento, ciudad: d.ciudad } }) });
+      body: JSON.stringify({ items, envio: { departamento: d.departamento, ciudad: d.ciudad }, cliente: d }) });
     const res = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(res.error || "No pudimos preparar el pago. Intenta de nuevo en un momento.");
     if (typeof WidgetCheckout === "undefined") throw new Error("La ventana de pago no cargó. Revisa tu conexión y vuelve a intentarlo.");
@@ -924,7 +924,7 @@ async function pagar() {
     congelarFondo();
     widget.open(rr => {
       const t = rr && rr.transaction;
-      if (t && t.status === "APPROVED") registrarCompra(t.id || res.referencia, res.montoEnCentavos / 100, comprado);
+      if (t && t.status === "APPROVED") { registrarCompra(t.id || res.referencia, res.montoEnCentavos / 100, comprado); if (t.id) consultarPago(t.id).catch(() => {}); } // la tienda confirma con Wompi y anota el pedido
       if (t && t.status === "PENDING" && t.id) esperarAprobacion(t.id);
       if (t && (t.status === "APPROVED" || t.status === "PENDING")) { listo = true; soltarFondo(); if ($("carrito").open) $("carrito").close(); carrito = {}; guardar(); mostrarGracias(); }
       else if (t) volverAlPago("El pago no se completó. Puedes intentarlo de nuevo o elegir otro medio de pago.");

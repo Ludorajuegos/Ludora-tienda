@@ -5,6 +5,7 @@
 //   /api/pqr          → guarda el formulario de juego dañado en la hoja "PQR Ludora"
 // Variables (Cloudflare → tu Worker → Settings → Variables and Secrets):
 //   HOJA_PRODUCTOS, PQR_URL, WOMPI_PUBLIC_KEY, WOMPI_INTEGRITY_KEY
+//   PEDIDOS_URL (Apps Script de la hoja "pedidos ludora") y WOMPI_EVENTS_KEY (secreto de Eventos de Wompi)
 import respaldo from "./productos.js";
 
 const { JUEGOS, ENVIOS, GRUPOS } = respaldo;
@@ -157,7 +158,34 @@ async function sha256(texto) {
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-async function firmar(request, env) {
+/* ---------- Hoja "pedidos ludora" ---------- */
+// Envía datos al Apps Script de la hoja de pedidos. Nunca frena la compra si la hoja falla.
+async function avisarPedidos(env, datos) {
+  if (!env.PEDIDOS_URL) return;
+  try {
+    const r = await fetch(env.PEDIDOS_URL, {
+      method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(datos), redirect: "follow", signal: AbortSignal.timeout(20000)
+    });
+    const res = await r.json().catch(() => ({}));
+    if (!res.ok) console.error("Hoja de pedidos:", res.error || r.status);
+  } catch (e) { console.error("Hoja de pedidos no respondió:", e.message); }
+}
+const urlWompi = env => String(env.WOMPI_PUBLIC_KEY || "").trim().startsWith("pub_test_") ? "https://sandbox.wompi.co/v1" : "https://production.wompi.co/v1";
+// Le pregunta a Wompi por el pago (no se le cree al navegador) y, si se aprobó, lo anota en la hoja
+async function confirmarPago(env, id) {
+  const r = await fetch(`${urlWompi(env)}/transactions/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(8000) });
+  if (!r.ok) return null;
+  const t = (await r.json()).data || {};
+  if (!String(t.reference || "").startsWith("LUD-")) return null;
+  if (t.status === "APPROVED") await avisarPedidos(env, {
+    accion: "pago", referencia: t.reference, transaccion: t.id, estado: t.status,
+    valor: Math.round((t.amount_in_cents || 0) / 100), medio: t.payment_method_type || ""
+  });
+  return t;
+}
+
+async function firmar(request, env, ctx) {
   // .trim() quita espacios o saltos de línea que se cuelan al copiar y pegar las llaves
   const llavePublica = String(env.WOMPI_PUBLIC_KEY || "").trim(), secreto = String(env.WOMPI_INTEGRITY_KEY || "").trim();
   if (!llavePublica || !secreto) return json(500, { error: "Los pagos aún no están configurados en la tienda." });
@@ -166,8 +194,8 @@ async function firmar(request, env) {
   if (ambiente === "?" || !secreto.startsWith(`${ambiente}_integrity_`))
     return json(500, { error: "Las llaves de pago no coinciden. Revisa en Cloudflare que WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_KEY sean del mismo modo de Wompi (pruebas o producción)." });
 
-  let items, destino;
-  try { ({ items, envio: destino } = await request.json()); } catch { items = null; }
+  let items, destino, cliente;
+  try { ({ items, envio: destino, cliente } = await request.json()); } catch { items = null; }
   if (!destino || !destino.departamento || !destino.ciudad) return json(400, { error: "Completa los datos de envío." });
   // La zona se calcula aquí con la ciudad real, no la elige el navegador.
   const ciudad = norm(destino.ciudad);
@@ -176,7 +204,7 @@ async function firmar(request, env) {
 
   const { juegos } = await leerCatalogo(env, 30000);
   let total = 0;
-  const partes = [];
+  const partes = [], detalle = [];
   for (const it of items) {
     const juego = juegos.find(j => j.id === it.id);
     const cantidad = Number(it.cantidad);
@@ -187,6 +215,7 @@ async function firmar(request, env) {
     if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > 10) return json(400, { error: "Revisa las cantidades del carrito." });
     total += juego.precio * cantidad;
     partes.push(`${juego.id}x${cantidad}`);
+    detalle.push({ id: juego.id, nombre: juego.nombre, cantidad, precio: juego.precio });
   }
   total += ENVIOS[zona].valor;
 
@@ -195,6 +224,13 @@ async function firmar(request, env) {
   const referencia = `LUD-${Date.now().toString(36).toUpperCase()}-${partes.join("_").slice(0, 170)}-${zona === "bogota" ? "BOG" : "NAL"}`;
   const montoEnCentavos = Math.round(total * 100);
   const firma = await sha256(`${referencia}${montoEnCentavos}COP${secreto}`);
+  // Se guarda el intento de compra con los datos de envío; pasa a "Pedidos" solo si Wompi aprueba el pago
+  const c = cliente && typeof cliente === "object" ? cliente : {};
+  const campos = ["nombre", "cedula", "celular", "correo", "departamento", "ciudad", "direccion", "barrio", "localidad", "especificaciones"];
+  ctx.waitUntil(avisarPedidos(env, {
+    accion: "intento", referencia, total, envio: ENVIOS[zona].valor, items: detalle,
+    cliente: Object.fromEntries(campos.map(k => [k, limpio(c[k], 300)]))
+  }));
   return json(200, { referencia, montoEnCentavos, firma, llavePublica });
 }
 
@@ -234,21 +270,37 @@ async function pqr(request, env) {
 async function transaccion(url, env) {
   const id = url.searchParams.get("id") || "";
   if (!/^[\w-]{5,80}$/.test(id)) return json(400, { error: "Transacción no válida." });
-  const base = String(env.WOMPI_PUBLIC_KEY || "").trim().startsWith("pub_test_") ? "https://sandbox.wompi.co/v1" : "https://production.wompi.co/v1";
   try {
-    const r = await fetch(`${base}/transactions/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(8000) });
-    if (!r.ok) return json(404, { error: "No encontramos el pago." });
-    const t = (await r.json()).data || {};
-    if (!String(t.reference || "").startsWith("LUD-")) return json(404, { error: "No encontramos el pago." });
+    const t = await confirmarPago(env, id);
+    if (!t) return json(404, { error: "No encontramos el pago." });
     return json(200, { id: t.id, estado: t.status, valor: Math.round((t.amount_in_cents || 0) / 100), referencia: t.reference });
   } catch { return json(502, { error: "Wompi no respondió." }); }
 }
 
+// Wompi avisa aquí cada cambio de un pago (URL de Eventos en el panel de Wompi).
+// Sirve aunque el cliente cierre la página antes de volver a la tienda.
+async function eventosWompi(request, env) {
+  let ev;
+  try { ev = await request.json(); } catch { return json(400, { error: "Evento no válido." }); }
+  const secreto = String(env.WOMPI_EVENTS_KEY || "").trim();
+  if (!secreto) return json(200, { ok: true, nota: "Falta WOMPI_EVENTS_KEY" });
+  // Firma de Wompi: SHA256 de los valores indicados + timestamp + secreto de eventos
+  const valor = ruta => ruta.split(".").reduce((o, k) => (o == null ? o : o[k]), ev.data);
+  const cadena = (ev.signature?.properties || []).map(p => String(valor(p) ?? "")).join("") + String(ev.timestamp ?? "") + secreto;
+  if (!ev.signature?.checksum || (await sha256(cadena)).toUpperCase() !== String(ev.signature.checksum).toUpperCase())
+    return json(401, { error: "Firma no válida." });
+  const t = ev.data?.transaction || {};
+  if (ev.event === "transaction.updated" && t.id && String(t.reference || "").startsWith("LUD-") && t.status === "APPROVED")
+    await confirmarPago(env, t.id);
+  return json(200, { ok: true });
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url), { pathname } = url;
     if (pathname === "/api/productos.js") return productosJS(env);
-    if (pathname === "/api/firmar") return request.method === "POST" ? firmar(request, env) : json(405, { error: "Método no permitido." });
+    if (pathname === "/api/firmar") return request.method === "POST" ? firmar(request, env, ctx) : json(405, { error: "Método no permitido." });
+    if (pathname === "/api/wompi-eventos") return request.method === "POST" ? eventosWompi(request, env) : json(405, { error: "Método no permitido." });
     if (pathname === "/api/transaccion") return transaccion(url, env);
     if (pathname === "/api/pqr") return request.method === "POST" ? pqr(request, env) : json(405, { error: "Método no permitido." });
     return env.ASSETS.fetch(request);
